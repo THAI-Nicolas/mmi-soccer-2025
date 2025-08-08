@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Mathis" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: .75px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-4, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-1, .cls-5, .cls-7, .cls-9 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #1e4e9d;
+      }
+
+      .cls-12 {
+        fill: #fbfbfb;
+      }
+
+      .cls-3 {
+        stroke-width: .25px;
+      }
+
+      .cls-3, .cls-5 {
+        stroke: #fff;
+      }
+
+      .cls-3, .cls-10, .cls-11 {
+        fill: #1d1d1b;
+      }
+
+      .cls-4 {
+        fill: #e0e8f5;
+      }
+
+      .cls-5 {
+        stroke-width: 17px;
+      }
+
+      .cls-6 {
+        fill: #fddcb7;
+      }
+
+      .cls-6, .cls-7, .cls-8, .cls-10 {
+        stroke-width: 2px;
+      }
+
+      .cls-8 {
+        fill: #fff;
+      }
+
+      .cls-9 {
+        stroke-width: 3px;
+      }
+
+      .cls-13 {
+        fill: #0d0e1b;
+      }
+      
+      /* Animations pour Mathis blasé et fatigué */
+      
+      /* Animation des cheveux - mouvement lourd et lent */
+      #cheveux-2 {
+        animation: cheveuxMathis 8s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxMathis {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        30% { transform: rotate(-0.3deg) scale(1.001); }
+        70% { transform: rotate(0.2deg) scale(0.999); }
+      }
+      
+      /* Animation de la barbe - mouvement de mastication blasée */
+      #barbe {
+        animation: barbeMathis 6s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes barbeMathis {
+        0%, 100% { transform: scaleY(1) translateY(0px); }
+        20% { transform: scaleY(1.02) translateY(0.5px); }
+        40% { transform: scaleY(0.98) translateY(-0.3px); }
+        60% { transform: scaleY(1.01) translateY(0.2px); }
+        80% { transform: scaleY(0.99) translateY(-0.1px); }
+      }
+      
+      /* Animation de la moustache - frémissement de dédain */
+      #moustache {
+        animation: moustacheMathis 4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes moustacheMathis {
+        0%, 100% { transform: scaleX(1) scaleY(1); }
+        25% { transform: scaleX(1.03) scaleY(0.98); }
+        50% { transform: scaleX(0.97) scaleY(1.02); }
+        75% { transform: scaleX(1.01) scaleY(0.99); }
+      }
+      
+      /* Animation des sourcils - affaissement de fatigue */
+      #sourcil_droit {
+        animation: sourcilDroitMathis 10s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      #sourcil_gauche {
+        animation: sourcilGaucheMathis 10s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes sourcilDroitMathis {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        30% { transform: translateY(1px) rotate(1deg); }
+        60% { transform: translateY(2px) rotate(1.5deg); }
+        90% { transform: translateY(1px) rotate(0.5deg); }
+      }
+      
+      @keyframes sourcilGaucheMathis {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(1.5px) rotate(-1deg); }
+        55% { transform: translateY(2.5px) rotate(-1.8deg); }
+        85% { transform: translateY(1px) rotate(-0.8deg); }
+      }
+      
+      /* Animation de la bouche - soupir de lassitude */
+      #bouche-2 {
+        animation: boucheMathis 12s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes boucheMathis {
+        0%, 100% { transform: scaleX(1) translateY(0px); }
+        20% { transform: scaleX(0.95) translateY(1px); }
+        40% { transform: scaleX(1.05) translateY(0px); }
+        60% { transform: scaleX(0.98) translateY(0.5px); }
+        80% { transform: scaleX(1.02) translateY(-0.2px); }
+      }
+      
+      /* Animation du visage - léger affaissement */
+      #visage {
+        animation: visageMathis 15s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes visageMathis {
+        0%, 100% { transform: scaleY(1) translateY(0px); }
+        50% { transform: scaleY(0.998) translateY(0.5px); }
+      }
+      
+      /* Animation de coiffure - ciseaux ultra-réalistes */
+      
+      /* Ciseaux de coiffeur - mouvement professionnel réaliste vers les cheveux */
+      #ciseaux-coiffure {
+        animation: ciseauxCoiffure 6s ease-in-out infinite;
+        transform-origin: center;
+        opacity: 0;
+      }
+      
+      @keyframes ciseauxCoiffure {
+        0%, 100% { opacity: 0; transform: translateX(80px) translateY(-200px) rotate(180deg) scale(0.8); }
+        10% { opacity: 1; transform: translateX(70px) translateY(-190px) rotate(170deg) scale(0.9); }
+        20% { opacity: 1; transform: translateX(60px) translateY(-180px) rotate(160deg) scale(1); }
+        30% { opacity: 1; transform: translateX(50px) translateY(-170px) rotate(150deg) scale(1.1); }
+        40% { opacity: 1; transform: translateX(40px) translateY(-160px) rotate(140deg) scale(1); }
+        50% { opacity: 1; transform: translateX(30px) translateY(-150px) rotate(130deg) scale(1.05); }
+        60% { opacity: 1; transform: translateX(20px) translateY(-140px) rotate(120deg) scale(1); }
+        70% { opacity: 1; transform: translateX(10px) translateY(-130px) rotate(110deg) scale(0.95); }
+        80% { opacity: 1; transform: translateX(0px) translateY(-120px) rotate(100deg) scale(1); }
+        90% { opacity: 0; transform: translateX(-10px) translateY(-110px) rotate(90deg) scale(0.9); }
+      }
+      
+      /* Animation des lames des ciseaux - coupes professionnelles */
+      #lame1 { 
+        animation: lame1Coiffure 6s ease-in-out infinite;
+        transform-origin: 241px 132.5px;
+      }
+      #lame2 { 
+        animation: lame2Coiffure 6s ease-in-out infinite;
+        transform-origin: 241px 132.5px;
+      }
+      
+      @keyframes lame1Coiffure {
+        0%, 100% { transform: rotate(0deg); }
+        20%, 25% { transform: rotate(0deg); }
+        30% { transform: rotate(12deg); }
+        35% { transform: rotate(3deg); }
+        40% { transform: rotate(15deg); }
+        45% { transform: rotate(2deg); }
+        50% { transform: rotate(18deg); }
+        55% { transform: rotate(4deg); }
+        60% { transform: rotate(20deg); }
+        65% { transform: rotate(3deg); }
+        70% { transform: rotate(16deg); }
+        75% { transform: rotate(2deg); }
+        80%, 85% { transform: rotate(0deg); }
+      }
+      
+      @keyframes lame2Coiffure {
+        0%, 100% { transform: rotate(0deg); }
+        20%, 25% { transform: rotate(0deg); }
+        30% { transform: rotate(-12deg); }
+        35% { transform: rotate(-3deg); }
+        40% { transform: rotate(-15deg); }
+        45% { transform: rotate(-2deg); }
+        50% { transform: rotate(-18deg); }
+        55% { transform: rotate(-4deg); }
+        60% { transform: rotate(-20deg); }
+        65% { transform: rotate(-3deg); }
+        70% { transform: rotate(-16deg); }
+        75% { transform: rotate(-2deg); }
+        80%, 85% { transform: rotate(0deg); }
+      }
+      
+      /* Petits cheveux qui tombent - effet réaliste de coupe */
+      .cheveu-coupe {
+        animation: cheveuxTombent 6s ease-in infinite;
+        opacity: 0;
+      }
+      
+      .cheveu-1 { animation-delay: 1.8s; }
+      .cheveu-2 { animation-delay: 2.0s; }
+      .cheveu-3 { animation-delay: 2.2s; }
+      .cheveu-4 { animation-delay: 2.4s; }
+      .cheveu-5 { animation-delay: 2.6s; }
+      .cheveu-6 { animation-delay: 2.8s; }
+      .cheveu-7 { animation-delay: 3.0s; }
+      
+      @keyframes cheveuxTombent {
+        0%, 100% { opacity: 0; transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); }
+        30% { opacity: 0; transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); }
+        32% { opacity: 1; transform: translateY(2px) translateX(1px) rotate(15deg) scale(1.1); }
+        40% { opacity: 1; transform: translateY(6px) translateX(2px) rotate(35deg) scale(1); }
+        50% { opacity: 0.9; transform: translateY(12px) translateX(3px) rotate(60deg) scale(0.9); }
+        60% { opacity: 0.7; transform: translateY(20px) translateX(4px) rotate(90deg) scale(0.8); }
+        70% { opacity: 0.5; transform: translateY(30px) translateX(5px) rotate(130deg) scale(0.7); }
+        80% { opacity: 0.3; transform: translateY(42px) translateX(6px) rotate(180deg) scale(0.6); }
+        90% { opacity: 0.1; transform: translateY(56px) translateX(7px) rotate(240deg) scale(0.5); }
+        95% { opacity: 0; transform: translateY(72px) translateX(8px) rotate(300deg) scale(0.4); }
+      }
+      
+      /* Effet brillant sur les cheveux après coiffure */
+      #cheveux-2 {
+        animation: cheveuxMathis 8s ease-in-out infinite, brillantCheveux 6s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes brillantCheveux {
+        0%, 89%, 100% { filter: brightness(1) saturate(1) contrast(1); }
+        90% { filter: brightness(1.2) saturate(1.15) contrast(1.08) hue-rotate(5deg); }
+        95% { filter: brightness(1.1) saturate(1.08) contrast(1.04) hue-rotate(2deg); }
+        98% { filter: brightness(1.03) saturate(1.02) contrast(1.01); }
+      }
+    </style>
+  </defs>
+  <g id="fond-2" data-name="fond">
+    <rect class="cls-2" x="1.06" y="1.58" width="400.04" height="400.04"/>
+    <path class="cls-4" d="M1.96,118.19C9.69,117.01,160.8,1.58,160.8,1.58h93.63l146,108.32v140.44l-49.41,151.24-288,.04L1.06,213.56l.9-95.37Z"/>
+    <polyline class="cls-5" points="324.05 53.81 210.15 207.95 392.69 271.92"/>
+    <polyline class="cls-5" points="20.88 271.96 210.15 207.95 92.5 53.91"/>
+    <line class="cls-5" x1="330.17" y1="44.27" x2="357.28" y2="1.58"/>
+    <line class="cls-5" x1="87.02" y1="44.27" x2="59.91" y2="1.58"/>
+    <line class="cls-5" x1="403.44" y1="275.25" x2="398.94" y2="273.92"/>
+    <line class="cls-5" x1="-3.44" y1="280.46" x2="9.37" y2="275.86"/>
+  </g>
+  <g id="t-shirt">
+    <g id="maillot">
+      <path class="cls-13" d="M220.35,288.62l4.62,18.56,7.36,1.12,27.32,8.39,14.19,3.91,14.71.56-.53,9.51v14.54l6.83,30.19,5.25,22.36v1.68h-24.69l-13.14-27.96-1.58-3.91-1.05-.56-1.58,6.71-6.83,21.25-1.58,4.47-10.51.56h-79.86l-2.63-2.8-7.36-19.57-3.68-9.51-1.05-.56-1.05,3.91-6.31,12.3-7.36,15.1-.53.56h-17.34l-8.93-.56,1.05-6.15,3.68-12.86,4.2-13.42,5.25-19.01.53-12.86-.53-11.74,14.19-1.12,9.46-2.24,32.05-10.06,5.78-1.68h0l6.08-19.12"/>
+    </g>
+    <g id="badge">
+      <path class="cls-12" d="M241.83,356.99h4.73v24.7l-6.31,5.25-3.68,3.15-2.1-.53-8.93-6.83-1.58-1.58-.53-2.1-.53-21.02.53-.53,18.39-.53Z"/>
+    </g>
+  </g>
+  <path id="visage" class="cls-6" d="M277.84,178.05l-10.89,37.7-11.59,40.1c-.54,1.74-1.54,3.29-2.9,4.5-8.24,7.33-38.41,34.08-42.82,36.37-5.11,2.67-11.78,0-11.78,0l-42.69-31.95c-1.81-1.35-3.1-3.27-3.68-5.45l-22.33-84.6"/>
+  <g id="yeux-3" data-name="yeux">
+    <g id="oeil_droit">
+      <polygon id="paupiere" class="cls-8" points="216.13 208.83 258.21 209.64 251.41 222.7 243.71 225.93 228 223.51 216.13 208.83"/>
+      <path id="pupille" class="cls-1" d="M239.06,214.56s-.67-.04-.24-.47c.81-.79,1.56.31,1.03.89-.53.58-1.72.48-2.15-.08-.47-.62-.32-1.68.66-2.02s2.59-.06,2.84,1.07-.33,1.98-1.58,2.43-2.74.09-3.45-.9c-.88-1.21-.18-2.49.07-2.93.46-.83,1.17-1.1,3.15-1.23,1.22-.08,2.78.62,3.27,2.15.44,1.38.17,2.77-1.33,3.74s-4.59.87-5.53.07-1.69-1.82-1.8-3.8c-.11-2.16,2.02-3.34,3.43-3.59,1.44-.26,4.47-.13,5.18.62s1.5,1.12,1.87,2.78.03,3.42-1.34,4.65c-1.92,1.73-4.97,1.55-5.97,1.25s-1.86-.31-3.24-1.61c-.79-.75-1.54-2.05-1.79-3.01s-.35-2.41.09-3.44c.96-2.24,1.75-2.04,1.75-2.04l10.8.23s4.32,5.36-.48,9.95c-4.78,4.57-11.11.24-12.23-1.44-1.25-1.87-2.7-3.17-1.25-8.81"/>
+    </g>
+    <g id="oeil_gauche">
+      <polygon id="paupiere-2" data-name="paupiere" class="cls-8" points="194.18 208.83 152.1 209.64 158.9 222.7 166.6 225.93 182.31 223.51 194.18 208.83"/>
+      <path id="pupille-2" data-name="pupille" class="cls-1" d="M171.25,214.56s.67-.04.24-.47c-.81-.79-1.56.31-1.03.89.53.58,1.72.48,2.15-.08.47-.62.32-1.68-.66-2.02s-2.59-.06-2.84,1.07.33,1.98,1.58,2.43,2.74.09,3.45-.9c.88-1.21.18-2.49-.07-2.93-.46-.83-1.17-1.1-3.15-1.23-1.22-.08-2.78.62-3.27,2.15-.44,1.38-.17,2.77,1.33,3.74s4.59.87,5.53.07,1.69-1.82,1.8-3.8c.11-2.16-2.02-3.34-3.43-3.59-1.44-.26-4.47-.13-5.18.62s-1.5,1.12-1.87,2.78-.03,3.42,1.34,4.65c1.92,1.73,4.97,1.55,5.97,1.25s1.86-.31,3.24-1.61c.79-.75,1.54-2.05,1.79-3.01s.35-2.41-.09-3.44c-.96-2.24-1.75-2.04-1.75-2.04l-10.8.23s-4.32,5.36.48,9.95,11.11.24,12.23-1.44c1.25-1.87,2.7-3.17,1.25-8.81"/>
+    </g>
+  </g>
+  <g id="cheveux">
+    <polygon id="cheveux-2" data-name="cheveux" class="cls-11" points="243.65 128.66 279.21 124.88 296.03 163.59 286.72 178.58 271.17 202.54 249.63 181.31 227.09 190.29 209.49 185.58 188.8 190.29 174.29 177.81 151.75 177.81 137.66 206.87 118.56 161.28 136.5 124.88 172.06 128.66 194.98 115.69 212.88 127.34 232.95 119.19 243.65 128.66"/>
+  </g>
+  <g id="bouche">
+    <line id="bouche-2" data-name="bouche" class="cls-10" x1="194.18" y1="265.51" x2="214.37" y2="265.51"/>
+  </g>
+  <g id="pilosite">
+    <polyline id="moustache" class="cls-9" points="189.48 261.66 192.15 254.84 196.89 259.88 200 256.92 203.51 258.25 206.24 254.84 209.63 259.59 214.37 254.84 216.13 260.47 220 258.25 220 261.66"/>
+    <path id="barbe" class="cls-3" d="M223.42,291.22v-5.69s-5.58-3.84-5.26-3.31c.17.28.43,1.85.64,3.24l-2.26-1.77-.99-1.15.16.5-3.07-2.4-1.1,8.96-.06-.06-3.46-8.9-1.86,4.07-3.9-3.54-3.62,4.54-2.9-6.34-3.51,9.04-1.11-9.04-3.22,3.27.32-.97-2.93,3.39c.21-1.51.53-3.52.72-3.85.32-.53-5.26,3.31-5.26,3.31v5.69l2.98-2.39.21.35.43,5.27.96-2.93,3.09,5.23.96-1.85,4.93,5.62,1.42-2.82,7.86,5.17,4.23-4.35,1.64,3.27,3.91-7.6,1.99,3.82,3.08-5.67.97,2.96.45-5.58.14-.26,3.43,2.74Z"/>
+  </g>
+  <g id="sourcils-2" data-name="sourcils">
+    <line id="sourcil_droit" class="cls-7" x1="218.36" y1="200" x2="248.22" y2="200"/>
+    <line id="sourcil_gauche" class="cls-7" x1="158.8" y1="200" x2="188.66" y2="200"/>
+  </g>
+  
+  <!-- Éléments de coiffure -->
+  <g id="coiffure-elements">
+    <!-- Ciseaux de coiffeur réalistes -->
+    <g id="ciseaux-coiffure">
+      <!-- Lame supérieure -->
+      <g id="lame1">
+        <!-- Corps de la lame supérieure - orientée naturellement -->
+        <path d="M240 130 L275 120 L276 119.2 L275.5 118.8 L240 129.2 Z" fill="#1E4E9D" stroke="#0D2A5C" stroke-width="0.5"/>
+        <!-- Tranchant de la lame -->
+        <line x1="240" y1="129.2" x2="275.5" y2="118.8" stroke="#FFFFFF" stroke-width="0.4" opacity="0.8"/>
+        <!-- Pointe de la lame -->
+        <path d="M275 120 L276 119.2 L275.8 118.9 L275.2 119.1 Z" fill="#2E5A8A" stroke="#1E4E9D" stroke-width="0.2"/>
+        
+        <!-- Manche de la lame supérieure - orienté vers la gauche -->
+        <rect x="228" y="129.5" width="14" height="1.8" rx="0.9" fill="#1E4E9D" stroke="#0D2A5C" stroke-width="0.3"/>
+        
+        <!-- Anneau supérieur - repositionné -->
+        <circle cx="222" cy="130.5" r="5" fill="none" stroke="#1E4E9D" stroke-width="1.2"/>
+        <circle cx="222" cy="130.5" r="4" fill="none" stroke="#2E5A8A" stroke-width="0.4"/>
+        <circle cx="222" cy="130.5" r="3.2" fill="none" stroke="#4A90E2" stroke-width="0.2"/>
+      </g>
+      
+      <!-- Lame inférieure -->
+      <g id="lame2">
+        <!-- Corps de la lame inférieure - orientée dans la même direction -->
+        <path d="M242 135 L277 125 L278 124.2 L277.5 123.8 L242 134.2 Z" fill="#1E4E9D" stroke="#0D2A5C" stroke-width="0.5"/>
+        <!-- Tranchant de la lame -->
+        <line x1="242" y1="134.2" x2="277.5" y2="123.8" stroke="#FFFFFF" stroke-width="0.4" opacity="0.8"/>
+        <!-- Pointe de la lame -->
+        <path d="M277 125 L278 124.2 L277.8 123.9 L277.2 124.1 Z" fill="#2E5A8A" stroke="#1E4E9D" stroke-width="0.2"/>
+        
+        <!-- Manche de la lame inférieure - orienté vers la gauche -->
+        <rect x="230" y="134.5" width="14" height="1.8" rx="0.9" fill="#1E4E9D" stroke="#0D2A5C" stroke-width="0.3"/>
+        
+        <!-- Anneau inférieur - repositionné -->
+        <circle cx="224" cy="135.5" r="5" fill="none" stroke="#1E4E9D" stroke-width="1.2"/>
+        <circle cx="224" cy="135.5" r="4" fill="none" stroke="#2E5A8A" stroke-width="0.4"/>
+        <circle cx="224" cy="135.5" r="3.2" fill="none" stroke="#4A90E2" stroke-width="0.2"/>
+      </g>
+      
+      <!-- Vis de pivot centrale - repositionnée -->
+      <circle cx="241" cy="132.5" r="1.8" fill="#0D2A5C" stroke="#1E4E9D" stroke-width="0.4"/>
+      <circle cx="241" cy="132.5" r="1.2" fill="#1E4E9D"/>
+      <circle cx="241" cy="132.5" r="0.6" fill="#2E5A8A"/>
+      <!-- Fente de vis -->
+      <line x1="240.2" y1="132.5" x2="241.8" y2="132.5" stroke="#0D2A5C" stroke-width="0.3"/>
+      
+      <!-- Reflets sur les lames - ajustés -->
+      <line x1="245" y1="129.5" x2="270" y2="121" stroke="#FFFFFF" stroke-width="0.2" opacity="0.6"/>
+      <line x1="247" y1="134.5" x2="272" y2="126" stroke="#FFFFFF" stroke-width="0.2" opacity="0.6"/>
+      
+      <!-- Petites vis décoratives sur les manches -->
+      <circle cx="235" cy="130.5" r="0.4" fill="#0D2A5C"/>
+      <circle cx="237" cy="135.5" r="0.4" fill="#0D2A5C"/>
+    </g>
+    
+    <!-- Petits cheveux qui tombent pendant la coupe -->
+    <g id="cheveux-coupes">
+      <line class="cheveu-coupe cheveu-1" x1="220" y1="115" x2="222" y2="120" stroke="#1d1d1b" stroke-width="0.8"/>
+      <line class="cheveu-coupe cheveu-2" x1="235" y1="113" x2="236" y2="118" stroke="#1d1d1b" stroke-width="0.6"/>
+      <line class="cheveu-coupe cheveu-3" x1="250" y1="117" x2="253" y2="122" stroke="#1d1d1b" stroke-width="0.7"/>
+      <line class="cheveu-coupe cheveu-4" x1="205" y1="120" x2="207" y2="125" stroke="#1d1d1b" stroke-width="0.5"/>
+      <line class="cheveu-coupe cheveu-5" x1="265" y1="115" x2="267" y2="119" stroke="#1d1d1b" stroke-width="0.6"/>
+      <line class="cheveu-coupe cheveu-6" x1="190" y1="118" x2="192" y2="123" stroke="#1d1d1b" stroke-width="0.7"/>
+      <line class="cheveu-coupe cheveu-7" x1="275" y1="114" x2="277" y2="118" stroke="#1d1d1b" stroke-width="0.5"/>
+    </g>
+  </g>
+</svg>

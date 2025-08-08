@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Nicolas" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: .75px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-5, .cls-6, .cls-7, .cls-8, .cls-10 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-1, .cls-4, .cls-6 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #1e4e9d;
+      }
+
+      .cls-11 {
+        fill: #fbfbfb;
+      }
+
+      .cls-3 {
+        fill: #e0e8f5;
+      }
+
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: 17px;
+      }
+
+      .cls-5 {
+        fill: #fddcb7;
+      }
+
+      .cls-5, .cls-6, .cls-9 {
+        stroke-width: 2px;
+      }
+
+      .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-8 {
+        fill: #0c0d1c;
+        stroke-width: 3px;
+      }
+
+      .cls-9 {
+        stroke: #49392c;
+      }
+
+      .cls-9, .cls-10 {
+        fill: #49392c;
+      }
+
+      .cls-10 {
+        stroke-width: 1.5px;
+      }
+
+      /* Animations pour Nicolas */
+      
+      /* Animation des pupilles - effet de curiosité */
+      #oeil_droit g {
+        animation: regardCurieux 8s ease-in-out infinite;
+        transform-origin: 232.5px 219.68px;
+      }
+      
+      #oeil_gauche g {
+        animation: regardCurieux 8s ease-in-out infinite;
+        transform-origin: 165.91px 220.29px;
+      }
+      
+      @keyframes regardCurieux {
+        0%, 100% { transform: translate(0, 0); }
+        12% { transform: translate(3px, -2px); }
+        25% { transform: translate(-2px, -3px); }
+        37% { transform: translate(0, 0); }
+        50% { transform: translate(4px, 2px); }
+        62% { transform: translate(-3px, 3px); }
+        75% { transform: translate(2px, -1px); }
+        87% { transform: translate(0, 0); }
+      }
+      
+      /* Animation de rotation des spirales uniquement */
+      #oeil_droit g path {
+        animation: spiraleRotation 2.5s linear infinite;
+        transform-origin: 232.5px 219.68px;
+      }
+      
+      #oeil_gauche g path {
+        animation: spiraleRotation 2.5s linear infinite reverse;
+        transform-origin: 165.91px 220.29px;
+      }
+      
+      @keyframes spiraleRotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Animation subtile des sourcils */
+      #sourcil_droit, #sourcil_gauche {
+        animation: sourcilMove 5s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes sourcilMove {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-1px); }
+      }
+      
+      /* Animation légère des cheveux */
+      #cheveux {
+        animation: cheveuxMove 6s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxMove {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(1deg); }
+      }
+      
+      /* Animation des cheveux bas */
+      #cheveux_bas_droit, #cheveux_bas_gauche {
+        animation: cheveuxBasMove 4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes cheveuxBasMove {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(2px); }
+      }
+    </style>
+  </defs>
+  <g id="fond">
+    <g>
+      <rect class="cls-2" width="400.04" height="400.04"/>
+      <path class="cls-3" d="M.9,116.62C8.62,115.43,159.74,0,159.74,0h93.63l146,108.32v140.44l-49.41,151.24-288,.04L0,211.99l.9-95.37Z"/>
+      <polyline class="cls-4" points="322.99 52.23 209.09 206.37 391.63 270.34"/>
+      <polyline class="cls-4" points="19.82 270.38 209.09 206.37 91.44 52.33"/>
+      <line class="cls-4" x1="329.11" y1="42.69" x2="356.22"/>
+      <line class="cls-4" x1="85.96" y1="42.69" x2="58.85"/>
+      <line class="cls-4" x1="402.37" y1="273.68" x2="397.88" y2="272.34"/>
+      <line class="cls-4" x1="-4.5" y1="278.88" x2="8.3" y2="274.28"/>
+    </g>
+  </g>
+  <g id="t-shirt">
+    <path id="t-shirt-2" data-name="t-shirt" class="cls-8" d="M218.03,288.62l4.62,18.56,7.36,1.12,27.32,8.39,14.19,3.91,14.71.56-.53,9.51v14.54l6.83,30.19,5.25,22.36v1.68h-24.69l-13.14-27.96-1.58-3.91-1.05-.56-1.58,6.71-6.83,21.25-1.58,4.47-10.51.56h-79.86l-2.63-2.8-7.36-19.57-3.68-9.51-1.05-.56-1.05,3.91-6.31,12.3-7.36,15.1-.53.56h-17.34l-8.93-.56,1.05-6.15,3.68-12.86,4.2-13.42,5.25-19.01.53-12.86-.53-11.74,14.19-1.12,9.46-2.24,32.05-10.06,5.78-1.68h0l6.08-19.12"/>
+    <path id="badge" class="cls-11" d="M239.51,356.99h4.73v24.7l-6.31,5.25-3.68,3.15-2.1-.53-8.93-6.83-1.58-1.58-.53-2.1-.53-21.02.53-.53,18.39-.53Z"/>
+  </g>
+  <polyline id="cheveux_bas_droit" class="cls-10" points="244.57 261.33 245.89 271.48 238.91 271.48 235.67 281.11 228.41 278.24 222.78 292.67 215.6 291.37"/>
+  <polyline id="cheveux_bas_gauche" class="cls-10" points="154.75 263.55 151.92 273.56 160.95 273.14 165.22 281.78 171.92 279.22 174.81 291.37 185.51 291.37"/>
+  <path id="visage" class="cls-5" d="M136.75,216.56s0-73.59,64.59-73.59,63.64,69.56,63.64,69.56l-12.81,44.35c-.54,1.74-1.54,3.29-2.9,4.5-8.24,7.33-38.41,34.08-42.82,36.37-5.11,2.67-11.78,0-11.78,0l-42.69-31.95c-1.81-1.35-3.1-3.27-3.68-5.45l-11.56-43.78"/>
+  <g id="sourcils-2" data-name="sourcils">
+    <line id="sourcil_droit" class="cls-9" x1="215.72" y1="196" x2="245.58" y2="196"/>
+    <line id="sourcil_gauche" class="cls-9" x1="156.16" y1="196" x2="186.02" y2="196"/>
+  </g>
+  <polygon id="cheveux" class="cls-10" points="150.07 122.81 187.37 102.07 203.41 106.81 219.7 105.63 250.22 122.81 275.11 127.56 262.37 135.56 278.07 147.41 279.26 169.93 293.78 175.85 286.07 191.56 291.89 200 282.41 208.15 285.07 216.44 277.07 218.99 277.37 227.11 269.67 231.06 263.15 241.63 258.73 231.03 247.52 238.8 254.37 229.48 251.7 210.52 240.29 200 235.11 188.89 228.82 204.59 219.27 213.28 219.7 191.56 213.41 208.15 196.89 226.81 199.52 236.3 192.74 227.11 195.41 218.99 180.59 200 180 208.74 183.54 217.12 160.48 188 157.48 195.41 144.15 209.33 144.15 226.81 145.33 238.96 129.93 237.48 134.07 231.2 115.7 220.94 118.07 214.67 106.22 218.84 115.7 206.62 106.22 191.56 116.89 187.11 113.04 183.11 119.85 172.89 108 158.96 123.11 157.78 121.93 149.19 138.22 137.63 130.22 120.15 139.41 124.3 150.07 122.81"/>
+  <path id="bouche" class="cls-6" d="M229.42,259.99s-16.42,12.36-29.66,2.36h0c-13.24,10.01-29.17-2.36-29.17-2.36"/>
+  <g id="yeux-2" data-name="yeux">
+    <g id="oeil_droit">
+      <path class="cls-7" d="M209.09,219.86s23.22,29.63,46.44,0c0,0-20.68-30.33-46.44,0Z"/>
+      <g>
+        <ellipse id="pupille_droite" class="cls-1" cx="232.5" cy="219.68" rx="9.82" ry="9.9"/>
+        <path class="cls-1" d="M232.46,220.62s-.84-.05-.29-.59c1.01-1,1.94.39,1.29,1.12-.66.73-2.15.6-2.69-.11-.59-.77-.4-2.12.82-2.54s3.23-.07,3.55,1.34-.42,2.49-1.97,3.06-3.42.11-4.31-1.13c-1.1-1.53-.67-3.29-.36-3.86.58-1.05,1.98-2.13,4.61-2.15,2.68-.03,4.06,1.92,4.38,3.41.37,1.78-.32,3.54-2.19,4.76s-5.73,1.09-6.91.09c-1.13-.95-2.12-2.29-2.25-4.79-.14-2.72,1.76-4.51,4.28-5.27,3.41-1.03,5.5.46,6.64,1.05.9.47,2.01,1.83,2.47,3.91s.15,4.69-1.56,6.25c-2.4,2.18-6.62,2.32-7.87,1.94-1.25-.38-2.34-1.09-4.06-2.72-.99-.94-1.58-2.63-1.89-3.83s-.31-3.05.24-4.34c1.19-2.82,3.11-3.7,4.09-4.18,2.34-1.14,7.2-1.17,10.8,2.65,2.14,2.27,4.22,6.89-.29,11.84-5.59,6.13-13.62.12-15.02-2"/>
+      </g>
+    </g>
+    <g id="oeil_gauche">
+      <path class="cls-7" d="M189.33,220.46s-23.22,29.63-46.44,0c0,0,20.68-30.33,46.44,0Z"/>
+      <g>
+        <path class="cls-1" d="M165.96,221.22s.84-.05.29-.59c-1.01-1-1.94.39-1.29,1.12.66.73,2.15.6,2.69-.11.59-.77.4-2.12-.82-2.54s-3.23-.07-3.55,1.34.42,2.49,1.97,3.06,3.42.11,4.31-1.13c1.1-1.53.67-3.29.36-3.86-.58-1.05-1.98-2.13-4.61-2.15-2.68-.03-4.06,1.92-4.38,3.41-.37,1.78.32,3.54,2.19,4.76s5.73,1.09,6.91.09c1.13-.95,2.12-2.29,2.25-4.79.14-2.72-1.76-4.51-4.28-5.27-3.41-1.03-5.5.46-6.64,1.05-.9.47-2.01,1.83-2.47,3.91s-.15,4.69,1.56,6.25c2.4,2.18,6.62,2.32,7.87,1.94,1.25-.38,2.34-1.09,4.06-2.72.99-.94,1.58-2.63,1.89-3.83s.31-3.05-.24-4.34c-1.19-2.82-3.11-3.7-4.09-4.18-2.34-1.14-7.2-1.17-10.8,2.65-2.14,2.27-4.22,6.89.29,11.84,5.59,6.13,13.62.12,15.02-2"/>
+        <ellipse id="pupille_gauche" class="cls-1" cx="165.91" cy="220.29" rx="9.82" ry="9.9"/>
+      </g>
+    </g>
+  </g>
+</svg>

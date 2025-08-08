@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="margaux" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1e4e9d;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-14, .cls-15, .cls-16, .cls-17, .cls-18 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-16, .cls-17, .cls-18 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-2 {
+        fill: #fbfbfb;
+      }
+
+      .cls-3, .cls-8 {
+        fill: #fddcb7;
+      }
+
+      .cls-4 {
+        fill: #f5f5f5;
+      }
+
+      .cls-19, .cls-5 {
+        fill: #010102;
+      }
+
+      .cls-6 {
+        fill: #e0e8f5;
+      }
+
+      .cls-7 {
+        stroke: #fff;
+        stroke-width: 17px;
+      }
+
+      .cls-7, .cls-9, .cls-14, .cls-15, .cls-18 {
+        fill: none;
+      }
+
+      .cls-8, .cls-9, .cls-10, .cls-15, .cls-16 {
+        stroke-width: 2px;
+      }
+
+      .cls-10 {
+        fill: #fff;
+      }
+
+      .cls-11 {
+        fill: #f4f4f3;
+      }
+
+      .cls-12 {
+        fill: #fcfcfc;
+      }
+
+      .cls-13 {
+        fill: #f9f9f9;
+      }
+
+      .cls-14 {
+        stroke-width: .5px;
+      }
+
+      .cls-14, .cls-15 {
+        stroke: #5a4637;
+      }
+
+      .cls-16 {
+        fill: #5a4637;
+      }
+
+      .cls-17 {
+        fill: #f0f0f0;
+      }
+      
+      /* Animations pour Margaux */
+      
+      /* Animation des spirales - rotation sur elles-mêmes */
+      .spirale-droite {
+        animation: spiraleRotationDroite 2.2s linear infinite;
+        transform-origin: 166.74px 216.61px;
+      }
+      
+      .spirale-gauche {
+        animation: spiraleRotationGauche 2.2s linear infinite;
+        transform-origin: 232.37px 216.61px;
+      }
+      
+      @keyframes spiraleRotationDroite {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes spiraleRotationGauche {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-360deg); }
+      }
+      
+      /* Animation des sourcils - mouvement expressif */
+      #sourcil_droit {
+        animation: sourcilDroit 4.2s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      #sourcil_gauche {
+        animation: sourcilGauche 4.2s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes sourcilDroit {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-1.8px) rotate(0.8deg); }
+        50% { transform: translateY(1.2px) rotate(-0.4deg); }
+        75% { transform: translateY(-0.8px) rotate(0.6deg); }
+      }
+      
+      @keyframes sourcilGauche {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-0.8px) rotate(-0.6deg); }
+        50% { transform: translateY(1.8px) rotate(0.4deg); }
+        75% { transform: translateY(-1.2px) rotate(-0.8deg); }
+      }
+      
+      /* Animation des cheveux - mouvement naturel */
+      #cheveux {
+        animation: cheveuxMargaux 5.2s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxMargaux {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(0.7deg) scale(1.003); }
+        50% { transform: rotate(-0.5deg) scale(0.997); }
+        75% { transform: rotate(0.6deg) scale(1.002); }
+      }
+      
+      /* Animation du visage - léger mouvement de tête */
+      #visage {
+        animation: visageMargaux 6.2s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes visageMargaux {
+        0%, 100% { transform: translateX(0px) translateY(0px) rotate(0deg); }
+        30% { transform: translateX(1px) translateY(-0.4px) rotate(0.25deg); }
+        60% { transform: translateX(-1px) translateY(0.4px) rotate(-0.18deg); }
+      }
+      
+      /* Animation des lunettes qui tombent */
+      #lunettes {
+        animation: lunettesTombent 8s ease-in infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes lunettesTombent {
+        0%, 12.5% { 
+          transform: translateX(0px) translateY(0px) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        15% { 
+          transform: translateX(-5px) translateY(15px) rotate(-15deg) scale(1);
+          opacity: 1;
+        }
+        17.5% { 
+          transform: translateX(-15px) translateY(40px) rotate(-45deg) scale(1);
+          opacity: 0.8;
+        }
+        20% { 
+          transform: translateX(-25px) translateY(80px) rotate(-90deg) scale(1);
+          opacity: 0.5;
+        }
+        22.5% { 
+          transform: translateX(-35px) translateY(120px) rotate(-135deg) scale(1);
+          opacity: 0.2;
+        }
+        25% { 
+          transform: translateX(-45px) translateY(180px) rotate(-180deg) scale(1);
+          opacity: 0;
+        }
+        25.1%, 62.4% { 
+          transform: translateX(-45px) translateY(180px) rotate(-180deg) scale(1);
+          opacity: 0;
+        }
+        62.5% { 
+          transform: translateX(0px) translateY(-5px) rotate(0deg) scale(1.2);
+          opacity: 1;
+        }
+        64% { 
+          transform: translateX(0px) translateY(2px) rotate(0deg) scale(0.9);
+          opacity: 1;
+        }
+        65.5% { 
+          transform: translateX(0px) translateY(-1px) rotate(0deg) scale(1.1);
+          opacity: 1;
+        }
+        67% { 
+          transform: translateX(0px) translateY(1px) rotate(0deg) scale(0.95);
+          opacity: 1;
+        }
+        68.5% { 
+          transform: translateX(0px) translateY(0px) rotate(0deg) scale(1.05);
+          opacity: 1;
+        }
+        70%, 100% { 
+          transform: translateX(0px) translateY(0px) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </defs>
+  <g id="fond-2" data-name="fond">
+    <rect class="cls-1" x="3.59" y="-.02" width="400.04" height="400.04"/>
+    <path class="cls-6" d="M4.49,116.6C12.22,115.41,163.33-.02,163.33-.02h93.63l146,108.32v140.44l-49.41,151.24-288,.04L3.59,211.97l.9-95.37Z"/>
+    <polyline class="cls-7" points="326.58 52.21 212.68 206.36 395.22 270.32"/>
+    <polyline class="cls-7" points="23.41 270.36 212.68 206.36 95.03 52.31"/>
+    <line class="cls-7" x1="332.7" y1="42.68" x2="359.81" y2="-.02"/>
+    <line class="cls-7" x1="89.55" y1="42.68" x2="62.44" y2="-.02"/>
+    <line class="cls-7" x1="405.97" y1="273.66" x2="401.47" y2="272.32"/>
+    <line class="cls-7" x1="-.91" y1="278.86" x2="11.9" y2="274.27"/>
+  </g>
+  <path id="cheveux" class="cls-16" d="M135.38,110.31h134.22s40.44,40,39.56,41.33-6.22,247.74-6.22,247.74l-32.89-46.85-11.81,36.95-20.74-33.1-23.64,43.01h-63.62l-14.85-22.85-32.43,22.3-8.93-38.3,4.48-199.87,36.89-50.36Z"/>
+  <path id="maillot_dessous" class="cls-19" d="M214.7,289.89l1.48,22.59,11.68.13,27.24,7.93,14.14,3.7,14.67.53-.52,8.98v13.74l6.81,28.53,5.24,21.14v1.59h-24.62l-13.09-26.42-1.57-3.7-1.05-.53-1.57,6.34-6.81,20.08-1.57,4.23-10.48.53h-79.61l-2.62-2.64-7.33-18.49-3.67-8.98-1.05-.53-1.05,3.7-6.29,11.63-7.33,14.27-.52.53h-17.28l-8.9-.53,1.05-5.81,3.67-12.15,4.19-12.68,5.24-17.97.52-12.15-.52-11.1,14.14-1.06,9.43-2.11,31.95-9.51,5.76-1.59,3.59-.6,4.97-8.04.32-13.83"/>
+  <g id="bras">
+    <path id="bras_droit" class="cls-3" d="M101.97,374.64l19.38,6.34,6.81,2.64.52,1.59-7.33,14.27-1.57.53h-26.19l.52-2.64,6.29-19.55,1.05-2.64.52-.53Z"/>
+    <path id="bras_gauche" class="cls-3" d="M290.52,374.64h1.57l3.67,14.8,2.1,9.51-23.05.53-1.57-.53-5.24-10.04-2.1-4.23v-1.59l18.86-6.34,5.76-2.11Z"/>
+  </g>
+  <path class="cls-17" d="M211.96,355.61h17.81v11.1l-.52.53-3.67.53h-12.57l-1.05-.53-.52-4.23v-4.23l.52-3.17Z"/>
+  <g id="t-shirt">
+    <path class="cls-12" d="M221.39,310.7l8.38,2.11,11,3.17,1.57,1.06-1.05,5.81-3.14,15.85-2.62,11.1v2.11l4.19-6.87,3.14-5.81,2.62.53,2.62,2.64,1.05,2.11-.52,6.87-3.14,9.51-7.86,17.44-3.14,11.1-2.1,9.51-1.05.53h-68.61l-2.62-12.15-3.67-11.1-7.33-15.85-2.62-8.45-.52-5.81,1.57-3.7,2.62-2.64,2.1.53,2.62,4.23,4.19,6.87,1.57,1.59-2.1-6.87-4.19-21.14-1.05-4.76-.52-2.11,11-3.7,11-3.17,2.1.53,12.05,12.15,6.29,5.81,2.62,2.64h1.57l2.1-2.64,4.19-3.7,14.14-14.27,1.57-1.06Z"/>
+    <path class="cls-2" d="M251.24,319.15l3.67.53,12.57,3.7,5.76,1.06,12.57.53.52.53v22.72l3.14,14.8,2.1,7.93-.52,2.11-22,7.93-2.62,1.06-2.1-.53-4.19-8.98-2.1-3.7v-1.06h-1.05l-1.05,4.76-6.81,19.02-2.62,7.4-.52.53h-6.29l-.52-2.11,2.62-13.21,3.67-10.04,4.71-10.04,4.19-8.45,1.05-4.76v-7.4l-2.1-5.81-4.19-3.7-2.62-1.06.52-3.7,3.67-9.51.52-.53Z"/>
+    <path class="cls-2" d="M142.3,320.74l2.62.53,4.19,11.1-5.76,4.23-2.62,4.23-1.05,3.7v7.4l2.62,7.93,6.81,13.21,3.67,10.04,2.62,11.63v4.76l-3.14.53-1.57-2.11-6.81-15.85-4.71-10.57-1.05-2.64-1.57,2.11-6.29,11.63-1.05.53-11.52-4.23-12.57-4.23-2.62-1.06.52-4.23,4.71-15.85,1.05-4.23.52-7.4v-14.27l.52-1.06,1.57-.53,13.62-1.06,17.28-4.23Z"/>
+    <path class="cls-13" d="M218.24,296.43h1.05l1.05,7.4-2.62,2.64-7.33,4.23-7.33,5.28-1.57,12.15-2.1,2.64-1.57.53-3.14-3.7-1.05-11.1-10.48-6.87-5.24-3.7-.52-2.64.52-4.76,1.05-1.06,6.29,3.17,11,6.34,2.62.53,11-6.34,8.38-4.76Z"/>
+    <path class="cls-11" d="M219.29,306.47h1.05l.52,1.59-1.57,3.7-4.19,3.7-6.81,6.34-4.19,4.23-1.57.53.52-7.93,2.62-3.17,13.62-8.98Z"/>
+  </g>
+  <path class="cls-4" d="M176.34,307l2.1.53,5.76,4.23,7.86,5.28.52.53.52,8.45-3.67-3.17-11-11.1-1.57-1.06-.52-3.7Z"/>
+  <g id="badge">
+    <path class="cls-5" d="M213.01,370.41h16.76l.52.53v8.98l-.52,4.76-3.14,2.64-4.71,2.64-3.14-.53-6.29-4.23-1.05-2.11v-8.98l.52-3.17,1.05-.53ZM227.15,371.47l-13.62.53-.52.53v9.51l1.05,2.64,5.76,4.23,3.14-.53,5.76-4.23v-12.15l-1.57-.53Z"/>
+    <path class="cls-5" d="M211.96,355.61h17.81v11.1l-.52.53-3.67.53h-12.57l-1.05-.53-.52-4.23v-4.23l.52-3.17ZM214.05,356.67l-1.05,1.59v4.76l.52,3.17,2.1.53h7.33l5.76-.53.52-.53v-7.93l-2.62-1.06h-12.57Z"/>
+    <path class="cls-5" d="M218.24,358.78h4.71l.52.53v4.76l-1.05.53h-3.67l-1.05-1.06v-4.23l.52-.53Z"/>
+  </g>
+  <g id="visage">
+    <path id="tête-2" data-name="tête" class="cls-8" d="M262.71,212.52l-12.81,44.35c-.54,1.74-1.54,3.29-2.9,4.5-8.24,7.33-38.41,34.08-42.82,36.37-5.11,2.67-11.78,0-11.78,0l-42.69-31.95c-1.81-1.35-3.1-3.27-3.68-5.45l-11.56-43.78,64.78-66.78,63.45,62.74Z"/>
+  </g>
+  <polyline id="bouche" class="cls-9" points="183.98 258.98 183.98 264.76 198.32 270.57 213.2 264.76 213.2 258.98"/>
+  <g id="yeux-2" data-name="yeux">
+    <g id="oeil_droit">
+      <polygon class="cls-10" points="142.85 225.53 156.71 210.79 177.33 210.88 190.5 222.96 167.29 222.53 142.85 225.53"/>
+      <g>
+        <path class="cls-14 spirale-droite" d="M166.72,217.13s-.47-.03-.16-.33c.56-.55,1.08.22.71.62-.37.41-1.19.33-1.49-.06-.33-.43-.22-1.17.45-1.41s1.79-.04,1.97.74-.23,1.38-1.09,1.7-1.9.06-2.39-.63c-.61-.85-.37-1.83-.2-2.14.32-.58,1.1-1.18,2.56-1.19s2.25,1.06,2.43,1.89c.21.99-.18,1.96-1.21,2.64s-3.18.61-3.83.05-1.17-1.27-1.25-2.65c-.08-1.51.97-2.5,2.38-2.92,1.89-.57,3.05.25,3.68.58.5.26,1.11,1.02,1.37,2.17s.08,2.6-.87,3.47c-1.33,1.21-3.67,1.29-4.36,1.08s-1.3-.6-2.25-1.51c-.55-.52-.88-1.46-1.05-2.12s-.17-1.69.13-2.41c.66-1.56,1.72-2.05,2.27-2.32,1.3-.63,3.99-.65,5.99,1.47,1.19,1.26,2.34,3.82-.16,6.57-3.1,3.4-7.55.07-8.33-1.11"/>
+        <ellipse class="cls-14" cx="166.74" cy="216.61" rx="5.44" ry="5.49"/>
+      </g>
+    </g>
+    <g id="oeil_gauche">
+      <polygon class="cls-10" points="255.45 225.43 241.58 210.69 220.97 210.78 207.8 222.86 231.01 222.43 255.45 225.43"/>
+      <g>
+        <path class="cls-14 spirale-gauche" d="M232.34,217.13s-.47-.03-.16-.33c.56-.55,1.08.22.71.62-.37.41-1.19.33-1.49-.06-.33-.43-.22-1.17.45-1.41s1.79-.04,1.97.74-.23,1.38-1.09,1.7-1.9.06-2.39-.63c-.61-.85-.37-1.83-.2-2.14.32-.58,1.1-1.18,2.56-1.19s2.25,1.06,2.43,1.89c.21.99-.18,1.96-1.21,2.64s-3.18.61-3.83.05-1.17-1.27-1.25-2.65c-.08-1.51.97-2.5,2.38-2.92,1.89-.57,3.05.25,3.68.58.5.26,1.11,1.02,1.37,2.17s.08,2.6-.87,3.47c-1.33,1.21-3.67,1.29-4.36,1.08s-1.3-.6-2.25-1.51c-.55-.52-.88-1.46-1.05-2.12s-.17-1.69.13-2.41c.66-1.56,1.72-2.05,2.27-2.32,1.3-.63,3.99-.65,5.99,1.47,1.19,1.26,2.34,3.82-.16,6.57-3.1,3.4-7.55.07-8.33-1.11"/>
+        <ellipse class="cls-14" cx="232.37" cy="216.61" rx="5.44" ry="5.49"/>
+      </g>
+    </g>
+  </g>
+  <g id="lunettes">
+    <path class="cls-18" d="M197.55,219.95s-13.11-17.77-13.11-18.1-36.04.02-36.04.02l-16.52,16.38,11.37,14.42h40.52l13.78-12.72Z"/>
+    <path class="cls-18" d="M199.83,219.95s13.11-17.77,13.11-18.1,36.04.02,36.04.02l16.52,16.38-11.37,14.42h-40.52l-13.78-12.72Z"/>
+    <line class="cls-18" x1="197.55" y1="219.95" x2="199.83" y2="219.95"/>
+  </g>
+  <g id="sourcils-2" data-name="sourcils">
+    <line id="sourcil_droit" class="cls-15" x1="209.07" y1="192.29" x2="235.81" y2="192.29"/>
+    <line id="sourcil_gauche" class="cls-15" x1="161.3" y1="192.29" x2="188.04" y2="192.29"/>
+  </g>
+</svg> 

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Francois" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: .75px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-1, .cls-5, .cls-6 {
+        fill: none;
+      }
+
+      .cls-11, .cls-8 {
+        fill: #706f6f;
+      }
+
+      .cls-2 {
+        fill: #703f42;
+      }
+
+      .cls-3 {
+        fill: #1e4e9d;
+      }
+
+      .cls-12 {
+        fill: #fbfbfb;
+      }
+
+      .cls-4 {
+        fill: #e0e8f5;
+      }
+
+      .cls-5 {
+        stroke: #fff;
+        stroke-width: 17px;
+      }
+
+      .cls-6, .cls-7, .cls-10 {
+        stroke-width: 2px;
+      }
+
+      .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-8 {
+        stroke-width: .25px;
+      }
+
+      .cls-13 {
+        fill: #0d0e1b;
+      }
+
+      .cls-9 {
+        fill: #1d1d1b;
+      }
+
+      .cls-10 {
+        fill: #fdf2de;
+      }
+      
+      /* Animations pour François */
+      
+      /* Animation des spirales - rotation sur elles-mêmes */
+      #spirale {
+        animation: spiraleRotationDroite 2s linear infinite;
+        transform-origin: 239.35px 211.93px;
+      }
+      
+      #spirale-2 {
+        animation: spiraleRotationGauche 2s linear infinite;
+        transform-origin: 164.3px 212.05px;
+      }
+      
+      @keyframes spiraleRotationDroite {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes spiraleRotationGauche {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-360deg); }
+      }
+      
+      /* Animation de la langue - mouvement expressif */
+      #langue {
+        animation: langueFrancois 3s ease-in-out infinite;
+        transform-origin: 189px 266px;
+      }
+      
+      @keyframes langueFrancois {
+        0%, 100% { transform: translateX(0px) translateY(0px) scaleX(1) scaleY(1) rotate(0deg); }
+        20% { transform: translateX(-1px) translateY(0.5px) scaleX(1.05) scaleY(0.95) rotate(-2deg); }
+        40% { transform: translateX(1.5px) translateY(-0.5px) scaleX(0.95) scaleY(1.05) rotate(3deg); }
+        60% { transform: translateX(-0.5px) translateY(1px) scaleX(1.02) scaleY(0.98) rotate(-1deg); }
+        80% { transform: translateX(1px) translateY(0px) scaleX(0.98) scaleY(1.02) rotate(2deg); }
+      }
+      
+      /* Animation des cheveux - mouvement léger */
+      #cheveux {
+        animation: cheveuxFrancois 4s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxFrancois {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(0.5deg) scale(1.002); }
+        50% { transform: rotate(-0.3deg) scale(0.998); }
+        75% { transform: rotate(0.4deg) scale(1.001); }
+      }
+    </style>
+  </defs>
+  <g id="fond-2" data-name="fond">
+    <rect class="cls-3" x="1.06" y="-.02" width="400.04" height="400.04"/>
+    <path class="cls-4" d="M1.96,116.6C9.69,115.41,160.8-.02,160.8-.02h93.63l146,108.32v140.44l-49.41,151.24-288,.04L1.06,211.97l.9-95.37Z"/>
+    <polyline class="cls-5" points="324.05 52.21 210.15 206.36 392.69 270.32"/>
+    <polyline class="cls-5" points="20.88 270.36 210.15 206.36 92.5 52.31"/>
+    <line class="cls-5" x1="330.17" y1="42.68" x2="357.28" y2="-.02"/>
+    <line class="cls-5" x1="87.02" y1="42.68" x2="59.91" y2="-.02"/>
+    <line class="cls-5" x1="403.44" y1="273.66" x2="398.94" y2="272.32"/>
+    <line class="cls-5" x1="-3.44" y1="278.86" x2="9.37" y2="274.27"/>
+  </g>
+  <g>
+    <rect class="cls-11" x="220.38" y="134.86" width="40.29" height="40.98" transform="translate(413.86 383.26) rotate(-160.11)"/>
+    <line class="cls-8" x1="257.94" y1="166.43" x2="244.83" y2="178.69"/>
+    <line class="cls-8" x1="259.49" y1="162.16" x2="242.65" y2="177.9"/>
+    <line class="cls-8" x1="260.85" y1="158.39" x2="240.64" y2="177.18"/>
+    <line class="cls-8" x1="262.34" y1="154.29" x2="238.16" y2="176.28"/>
+    <line class="cls-8" x1="263.64" y1="150.69" x2="236.19" y2="175.57"/>
+    <line class="cls-8" x1="265.15" y1="146.5" x2="233.97" y2="174.76"/>
+    <line class="cls-8" x1="266.45" y1="142.93" x2="231.66" y2="173.66"/>
+    <line class="cls-8" x1="263.98" y1="142.37" x2="228.93" y2="173"/>
+    <line class="cls-8" x1="261.43" y1="141.12" x2="226.37" y2="171.74"/>
+    <line class="cls-8" x1="258.46" y1="140.19" x2="223.41" y2="170.82"/>
+    <line class="cls-8" x1="255.93" y1="139.28" x2="220.88" y2="169.9"/>
+    <line class="cls-8" x1="252.96" y1="138.39" x2="217.91" y2="169.01"/>
+    <line class="cls-8" x1="249.71" y1="137.02" x2="214.65" y2="167.65"/>
+  </g>
+  <g>
+    <rect class="cls-11" x="142.16" y="133.44" width="43.3" height="42.86" transform="translate(265.16 356.24) rotate(-160.11)"/>
+    <line class="cls-8" x1="182.57" y1="166.66" x2="168.63" y2="179.41"/>
+    <line class="cls-8" x1="184.19" y1="162.19" x2="166.28" y2="178.56"/>
+    <line class="cls-8" x1="185.61" y1="158.25" x2="164.13" y2="177.78"/>
+    <line class="cls-8" x1="187.16" y1="153.96" x2="161.46" y2="176.81"/>
+    <line class="cls-8" x1="188.52" y1="150.2" x2="159.35" y2="176.05"/>
+    <line class="cls-8" x1="190.11" y1="145.82" x2="156.96" y2="175.18"/>
+    <line class="cls-8" x1="191.46" y1="142.08" x2="154.48" y2="174"/>
+    <line class="cls-8" x1="188.81" y1="141.47" x2="151.55" y2="173.29"/>
+    <line class="cls-8" x1="186.07" y1="140.13" x2="148.8" y2="171.95"/>
+    <line class="cls-8" x1="182.88" y1="139.13" x2="145.61" y2="170.95"/>
+    <line class="cls-8" x1="180.16" y1="138.15" x2="142.9" y2="169.97"/>
+    <line class="cls-8" x1="176.97" y1="137.19" x2="139.7" y2="169"/>
+    <line class="cls-8" x1="173.47" y1="135.73" x2="136.21" y2="167.55"/>
+  </g>
+  <g id="t-shirt">
+    <path id="maillot" class="cls-13" d="M220.35,288.62l4.62,18.56,7.36,1.12,27.32,8.39,14.19,3.91,14.71.56-.53,9.51v14.54l6.83,30.19,5.25,22.36v1.68h-24.69l-13.14-27.96-1.58-3.91-1.05-.56-1.58,6.71-6.83,21.25-1.58,4.47-10.51.56h-79.86l-2.63-2.8-7.36-19.57-3.68-9.51-1.05-.56-1.05,3.91-6.31,12.3-7.36,15.1-.53.56h-17.34l-8.93-.56,1.05-6.15,3.68-12.86,4.2-13.42,5.25-19.01.53-12.86-.53-11.74,14.19-1.12,9.46-2.24,32.05-10.06,5.78-1.68h0l6.08-19.12"/>
+    <path id="badge" class="cls-12" d="M241.83,356.99h4.73v24.7l-6.31,5.25-3.68,3.15-2.1-.53-8.93-6.83-1.58-1.58-.53-2.1-.53-21.02.53-.53,18.39-.53Z"/>
+  </g>
+  <path id="visage" class="cls-10" d="M139.14,222.66l-11.25-43.7s70.12-35.59,145.5.35l-6.09,40.85-12.81,41.68c-.54,1.63-1.54,3.09-2.9,4.23-8.24,6.89-38.41,32.02-42.82,34.18-5.11,2.51-11.78,0-11.78,0l-42.69-30.03c-1.81-1.27-3.1-3.08-3.68-5.13l-11.48-42.44"/>
+  <polygon id="cheveux" class="cls-9" points="201.59 173 223.03 156.95 249.71 149.8 267.12 242.3 274.72 221.49 285.69 253.83 299.19 166.93 251.42 112.39 150.09 111.21 104 159.62 116.52 258.03 127.34 221.28 136.83 242.54 149.64 152.33 174.83 157.35 201.59 173"/>
+  <g id="yeux-2" data-name="yeux">
+    <g id="oeil_droit">
+      <polygon id="paupière" class="cls-7" points="213.31 222.85 224.86 205.67 261.43 205.67 251.23 218.11 213.31 222.85"/>
+      <g id="pupille">
+        <path id="spirale" class="cls-1" d="M239.32,212.54s-.54-.03-.19-.39c.65-.66,1.25.26.83.73-.43.48-1.39.39-1.73-.07-.38-.51-.26-1.39.53-1.67s2.08-.05,2.29.88-.27,1.64-1.27,2.01-2.2.07-2.78-.74c-.71-1-.43-2.16-.23-2.53.37-.69,1.27-1.4,2.97-1.41s2.62,1.26,2.82,2.24c.24,1.17-.2,2.32-1.41,3.12s-3.69.72-4.45.06-1.36-1.5-1.45-3.14c-.09-1.79,1.13-2.96,2.76-3.46,2.2-.67,3.54.3,4.28.69.58.31,1.29,1.2,1.6,2.57s.1,3.08-1.01,4.1c-1.55,1.43-4.27,1.52-5.07,1.28s-1.51-.72-2.62-1.79c-.64-.62-1.02-1.72-1.22-2.51s-.2-2,.16-2.85c.77-1.85,2-2.43,2.64-2.74,1.51-.75,4.64-.77,6.96,1.74,1.38,1.49,2.72,4.52-.19,7.77-3.61,4.02-8.78.08-9.68-1.31"/>
+        <ellipse id="conteneur" class="cls-1" cx="239.35" cy="211.93" rx="6.33" ry="6.49"/>
+      </g>
+    </g>
+    <g id="oeil_gauche">
+      <polygon id="paupiere" class="cls-7" points="190.35 222.97 178.79 205.78 142.22 205.78 152.42 218.23 190.35 222.97"/>
+      <g id="pupille-2" data-name="pupille">
+        <path id="spirale-2" data-name="spirale" class="cls-1" d="M164.33,212.66s.54-.03.19-.39c-.65-.66-1.25.26-.83.73.43.48,1.39.39,1.73-.07.38-.51.26-1.39-.53-1.67s-2.08-.05-2.29.88.27,1.64,1.27,2.01,2.2.07,2.78-.74c.71-1,.43-2.16.23-2.53-.37-.69-1.27-1.4-2.97-1.41s-2.62,1.26-2.82,2.24c-.24,1.17.2,2.32,1.41,3.12s3.69.72,4.45.06,1.36-1.5,1.45-3.14c.09-1.79-1.13-2.96-2.76-3.46-2.2-.67-3.54.3-4.28.69-.58.31-1.29,1.2-1.6,2.57s-.1,3.08,1.01,4.1c1.55,1.43,4.27,1.52,5.07,1.28s1.51-.72,2.62-1.79c.64-.62,1.02-1.72,1.22-2.51s.2-2-.16-2.85c-.77-1.85-2-2.43-2.64-2.74-1.51-.75-4.64-.77-6.96,1.74-1.38,1.49-2.72,4.52.19,7.77,3.61,4.02,8.78.08,9.68-1.31"/>
+        <ellipse id="conteneur-2" data-name="conteneur" class="cls-1" cx="164.3" cy="212.05" rx="6.33" ry="6.49"/>
+      </g>
+    </g>
+  </g>
+  <polyline id="bouche" class="cls-10" points="177.6 258.48 178.97 263.15 213.45 272.26 217.68 268.7"/>
+  <g id="sourcils-2" data-name="sourcils">
+    <line id="sourcil_droit" class="cls-6" x1="218.91" y1="190.93" x2="248.77" y2="190.93"/>
+    <line id="sourcil_gauche" class="cls-6" x1="159.35" y1="190.93" x2="189.21" y2="190.93"/>
+  </g>
+  <polygon id="langue" class="cls-2" points="189.21 265.85 184.19 272.26 178.48 273.64 185.61 273.85 186.07 279.41 187.16 274.3 192.65 266.76 189.21 265.85"/>
+</svg>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="jules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #703f42;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-5, .cls-6, .cls-8, .cls-10, .cls-12, .cls-13 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-2 {
+        fill: #1e4e9d;
+      }
+
+      .cls-14, .cls-8, .cls-12 {
+        fill: #49392c;
+      }
+
+      .cls-3 {
+        fill: #e0e8f5;
+      }
+
+      .cls-4 {
+        stroke-width: 17px;
+      }
+
+      .cls-4, .cls-7, .cls-10 {
+        fill: none;
+      }
+
+      .cls-4, .cls-9, .cls-11 {
+        stroke: #fff;
+      }
+
+      .cls-5 {
+        stroke-width: 1.5px;
+      }
+
+      .cls-5, .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-6, .cls-10 {
+        stroke-width: .5px;
+      }
+
+      .cls-7 {
+        stroke: #49392c;
+      }
+
+      .cls-7, .cls-12 {
+        stroke-width: 3px;
+      }
+
+      .cls-8, .cls-13 {
+        stroke-width: 2px;
+      }
+
+      .cls-9 {
+        fill: #fbfbfb;
+      }
+
+      .cls-9, .cls-11 {
+        stroke-width: .25px;
+      }
+
+      .cls-11 {
+        fill: #0d0e1b;
+      }
+
+      .cls-13 {
+        fill: #fdf2de;
+      }
+      
+      /* Animations pour Jules */
+      
+      /* Animation des spirales - rotation sur elles-mêmes */
+      .spirale-droite {
+        animation: spiraleRotationDroite 2s linear infinite;
+        transform-origin: 232.03px 219.81px;
+      }
+      
+      .spirale-gauche {
+        animation: spiraleRotationGauche 2s linear infinite;
+        transform-origin: 167.69px 219.81px;
+      }
+      
+      @keyframes spiraleRotationDroite {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes spiraleRotationGauche {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-360deg); }
+      }
+      
+      /* Animation des sourcils - mouvement expressif */
+      #sourcil_droit {
+        animation: sourcilDroit 4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      #sourcil_gauche {
+        animation: sourcilGauche 4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes sourcilDroit {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-2px) rotate(1deg); }
+        50% { transform: translateY(1px) rotate(-0.5deg); }
+        75% { transform: translateY(-1px) rotate(0.5deg); }
+      }
+      
+      @keyframes sourcilGauche {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-1px) rotate(-0.5deg); }
+        50% { transform: translateY(2px) rotate(1deg); }
+        75% { transform: translateY(-2px) rotate(-1deg); }
+      }
+      
+      /* Animation des cheveux - mouvement naturel */
+      #cheveux {
+        animation: cheveuxJules 5s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxJules {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(0.8deg) scale(1.003); }
+        50% { transform: rotate(-0.5deg) scale(0.997); }
+        75% { transform: rotate(0.6deg) scale(1.002); }
+      }
+      
+      /* Animation du visage - léger mouvement de tête */
+      #visage {
+        animation: visageJules 6s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes visageJules {
+        0%, 100% { transform: translateX(0px) translateY(0px) rotate(0deg); }
+        30% { transform: translateX(1px) translateY(-0.5px) rotate(0.3deg); }
+        60% { transform: translateX(-1px) translateY(0.5px) rotate(-0.2deg); }
+      }
+      
+      /* Animation de la bouche - mouvement subtil sans soupir */
+      #bouche {
+        animation: boucheJules 8s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes boucheJules {
+        0%, 100% { transform: scaleY(1) scaleX(1); }
+        25% { transform: scaleY(0.98) scaleX(1.005); }
+        50% { transform: scaleY(1.01) scaleX(0.998); }
+        75% { transform: scaleY(0.99) scaleX(1.002); }
+      }
+    </style>
+  </defs>
+  <g id="fond-2" data-name="fond">
+    <rect class="cls-2" x="1.06" y="-.02" width="400.04" height="400.04"/>
+    <path class="cls-3" d="M1.96,116.6C9.69,115.41,160.8-.02,160.8-.02h93.63l146,108.32v140.44l-49.41,151.24-288,.04L1.06,211.97l.9-95.37Z"/>
+    <polyline class="cls-4" points="324.05 52.21 210.15 206.36 392.69 270.32"/>
+    <polyline class="cls-4" points="20.88 270.36 210.15 206.36 92.5 52.31"/>
+    <line class="cls-4" x1="330.17" y1="42.68" x2="357.28" y2="-.02"/>
+    <line class="cls-4" x1="87.02" y1="42.68" x2="59.91" y2="-.02"/>
+    <line class="cls-4" x1="403.44" y1="273.66" x2="398.94" y2="272.32"/>
+    <line class="cls-4" x1="-3.44" y1="278.86" x2="9.37" y2="274.27"/>
+  </g>
+  <polygon id="cheveux" class="cls-12" points="155.72 122.48 242.25 122.98 297.19 178.47 292.3 197.71 304.3 212.14 301.09 245 315.72 271.95 298.53 304.01 315.72 341.5 301.09 352.84 255.29 332.77 218.79 352.84 161.64 346.55 140.05 332.77 100.01 352.84 89.35 317.82 100.6 295.62 89.35 264.05 100.48 222.57 91.25 207.56 100.91 191.77 100.44 174.63 155.72 122.48"/>
+  <g id="t-shirt">
+    <path id="maillot" class="cls-11" d="M218.76,288.62l4.62,18.56,7.36,1.12,27.32,8.39,14.19,3.91,14.71.56-.53,9.51v14.54l6.83,30.19,5.25,22.36v1.68h-24.69l-13.14-27.96-1.58-3.91-1.05-.56-1.58,6.71-6.83,21.25-1.58,4.47-10.51.56h-79.86l-2.63-2.8-7.36-19.57-3.68-9.51-1.05-.56-1.05,3.91-6.31,12.3-7.36,15.1-.53.56h-17.34l-8.93-.56,1.05-6.15,3.68-12.86,4.2-13.42,5.25-19.01.53-12.86-.53-11.74,14.19-1.12,9.46-2.24,32.05-10.06,5.78-1.68h0l6.08-19.12"/>
+    <path id="badge" class="cls-9" d="M240.24,356.99h4.73v24.7l-6.31,5.25-3.68,3.15-2.1-.53-8.93-6.83-1.58-1.58-.53-2.1-.53-21.02.53-.53,18.39-.53Z"/>
+  </g>
+  <path id="visage" class="cls-13" d="M268.33,177.42l-15.44,79.45c-.54,1.74-1.54,3.29-2.9,4.5-8.24,7.33-38.41,34.08-42.82,36.37-5.11,2.67-11.78,0-11.78,0l-42.69-31.95c-1.81-1.35-3.1-3.27-3.68-5.45l-17.22-80.38,136.51-2.54Z"/>
+  <polyline id="cheveux_haut" class="cls-8" points="129.43 168.77 132.68 210.06 162.77 181.04 183.04 189.62 201.14 192.91 206.58 192.91 220.85 188.78 236.3 178.82 265.57 208.72 271.83 172.48"/>
+  <polygon id="bouche" class="cls-1" points="183.27 268.42 200.76 259.32 221.79 268.42 183.27 268.42"/>
+  
+  <g id="yeux-2" data-name="yeux">
+    <g id="oeil_droit">
+      <polygon id="paupiere" class="cls-5" points="213.33 228.43 213.33 214.8 250.37 210.94 246.22 225.76 213.33 228.43"/>
+      <g id="pupille">
+        <ellipse class="cls-6" cx="232.03" cy="219.81" rx="6.39" ry="6.56"/>
+        <path class="cls-6 spirale-droite" d="M231.99,220.43s-.55-.03-.19-.39c.66-.66,1.27.26.84.74-.43.49-1.4.4-1.75-.07-.38-.51-.26-1.4.53-1.68s2.11-.05,2.31.89-.27,1.65-1.29,2.03-2.23.07-2.81-.75c-.72-1.01-.44-2.18-.23-2.56.38-.7,1.29-1.41,3-1.43s2.65,1.27,2.85,2.26c.24,1.18-.21,2.35-1.43,3.16s-3.73.73-4.5.06-1.38-1.52-1.46-3.17c-.09-1.81,1.14-2.99,2.79-3.49,2.22-.68,3.58.3,4.33.7.59.31,1.31,1.21,1.61,2.59s.1,3.11-1.02,4.14c-1.56,1.45-4.31,1.54-5.12,1.29s-1.52-.72-2.65-1.81c-.65-.62-1.03-1.74-1.23-2.54s-.2-2.02.16-2.88c.78-1.87,2.02-2.45,2.66-2.77,1.53-.76,4.69-.78,7.03,1.75,1.39,1.51,2.75,4.57-.19,7.85-3.64,4.06-8.87.08-9.78-1.32"/>
+      </g>
+    </g>
+    <g id="oeil_gauche">
+      <polygon id="paupiere-2" data-name="paupiere" class="cls-5" points="186.38 228.43 186.38 214.8 149.34 210.94 153.49 225.76 186.38 228.43"/>
+      <g id="pupille-2" data-name="pupille">
+        <ellipse class="cls-10" cx="167.69" cy="219.81" rx="6.39" ry="6.56"/>
+        <path class="cls-10 spirale-gauche" d="M167.72,220.43s.55-.03.19-.39c-.66-.66-1.27.26-.84.74.43.49,1.4.4,1.75-.07.38-.51.26-1.4-.53-1.68s-2.11-.05-2.31.89.27,1.65,1.29,2.03,2.23.07,2.81-.75c.72-1.01.44-2.18.23-2.56-.38-.7-1.29-1.41-3-1.43s-2.65,1.27-2.85,2.26c-.24,1.18.21,2.35,1.43,3.16s3.73.73,4.5.06,1.38-1.52,1.46-3.17c.09-1.81-1.14-2.99-2.79-3.49-2.22-.68-3.58.3-4.33.7-.59.31-1.31,1.21-1.61,2.59s-.1,3.11,1.02,4.14c1.56,1.45,4.31,1.54,5.12,1.29s1.52-.72,2.65-1.81c.65-.62,1.03-1.74,1.23-2.54s.2-2.02-.16-2.88c-.78-1.87-2.02-2.45-2.66-2.77-1.53-.76-4.69-.78-7.03,1.75-1.39,1.51-2.75,4.57.19,7.85,3.64,4.06,8.87.08,9.78-1.32"/>
+      </g>
+    </g>
+  </g>
+  <g id="sourcils-2" data-name="sourcils">
+    <line id="sourcil_droit" class="cls-7" x1="215.04" y1="207.6" x2="244.52" y2="202.83"/>
+    <line id="sourcil_gauche" class="cls-7" x1="155.38" y1="203.55" x2="185.06" y2="206.88"/>
+  </g>
+  <rect id="rectangle_marron" class="cls-14" x="121.07" y="166.43" width="15.41" height="56.42"/>
+  <rect id="rectange_marron" class="cls-14" x="263.13" y="166.43" width="15.41" height="56.42"/>
+  <rect class="cls-14" x="110.66" y="232.31" width="27.11" height="0"/>
+</svg>

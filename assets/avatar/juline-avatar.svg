@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Juline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1e4e9d;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-5, .cls-6, .cls-8, .cls-10, .cls-11 {
+        stroke: #1d1d1b;
+      }
+
+      .cls-12 {
+        fill: #fbfbfb;
+      }
+
+      .cls-2 {
+        fill: #0d0e1b;
+      }
+
+      .cls-3 {
+        fill: #e0e8f5;
+      }
+
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: 17px;
+      }
+
+      .cls-4, .cls-5, .cls-8 {
+        fill: none;
+      }
+
+      .cls-5, .cls-10, .cls-11 {
+        stroke-width: 2px;
+      }
+
+      .cls-6, .cls-7, .cls-9 {
+        fill: #fff;
+      }
+
+      .cls-7 {
+        stroke: #3ea9bd;
+      }
+
+      .cls-7, .cls-9 {
+        stroke-width: .75px;
+      }
+
+      .cls-8 {
+        stroke-width: 3px;
+      }
+
+      .cls-9 {
+        stroke: #34b1c2;
+      }
+
+      .cls-10 {
+        fill: #e3ae5f;
+      }
+
+      .cls-11 {
+        fill: #fdf2de;
+      }
+
+      /* Animations pour Juline */
+      
+      /* Animation des cheveux - mouvement léger */
+      #cheveux-3 {
+        animation: cheveuxJuline 5s ease-in-out infinite;
+        transform-origin: center top;
+      }
+      
+      @keyframes cheveuxJuline {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(0.5deg) scale(1.003); }
+      }
+      
+      /* Animation des spirales dans les pupilles */
+      #pupille {
+        animation: spiraleRotationJuline 1.5s linear infinite, louchementJuline 3s ease-in-out infinite;
+        transform-origin: 165.73px 216.13px;
+      }
+      
+      #pupille-spirale {
+        animation: spiraleRotationJuline 1.5s linear infinite reverse, louchementDroitJuline 3s ease-in-out infinite;
+        transform-origin: 233.65px 215.68px;
+      }
+      
+      /* Cacher aussi les conteneurs des pupilles */
+      #conteneur-pupille {
+        animation: louchementJuline 3s ease-in-out infinite;
+        transform-origin: 165.78px 215.3px;
+      }
+      
+      #conteneur-pupille-2 {
+        animation: louchementDroitJuline 3s ease-in-out infinite;
+        transform-origin: 233.61px 214.85px;
+      }
+      
+      @keyframes spiraleRotationJuline {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes louchementJuline {
+        0% { transform: translateX(0px); }
+        70% { transform: translateX(0px); }
+        75% { transform: translateX(2px); }
+        80% { transform: translateX(4px); }
+        85% { transform: translateX(6px); }
+        90% { transform: translateX(6px); }
+        95% { transform: translateX(3px); }
+        100% { transform: translateX(0px); }
+      }
+      
+      @keyframes louchementDroitJuline {
+        0% { transform: translateX(0px); }
+        70% { transform: translateX(0px); }
+        75% { transform: translateX(-2px); }
+        80% { transform: translateX(-4px); }
+        85% { transform: translateX(-6px); }
+        90% { transform: translateX(-6px); }
+        95% { transform: translateX(-3px); }
+        100% { transform: translateX(0px); }
+      }
+      
+      /* Animation du sourire - mouvement réduit */
+      #bouche-3 {
+        animation: sourireJuline 4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      
+      @keyframes sourireJuline {
+        0%, 100% { transform: scaleX(1) scaleY(1); }
+        25% { transform: scaleX(1.03) scaleY(0.98); }
+        50% { transform: scaleX(1.02) scaleY(1.02); }
+        75% { transform: scaleX(1.04) scaleY(0.99); }
+      }
+    </style>
+  </defs>
+  <g id="fond-2" data-name="fond">
+    <rect class="cls-1" x="2.69" y="1.76" width="400.04" height="400.04"/>
+    <path class="cls-3" d="M3.59,118.38C11.32,117.19,162.43,1.76,162.43,1.76h93.63l146,108.32v140.44l-49.41,151.24-288,.04L2.69,213.75l.9-95.37Z"/>
+    <polyline class="cls-4" points="325.68 53.99 211.78 208.14 394.32 272.1"/>
+    <polyline class="cls-4" points="22.51 272.14 211.78 208.14 94.13 54.1"/>
+    <line class="cls-4" x1="331.8" y1="44.46" x2="358.91" y2="1.76"/>
+    <line class="cls-4" x1="88.65" y1="44.46" x2="61.54" y2="1.76"/>
+    <line class="cls-4" x1="405.07" y1="275.44" x2="400.57" y2="274.1"/>
+    <line class="cls-4" x1="-1.81" y1="280.64" x2="11" y2="276.05"/>
+  </g>
+  <g id="tshirt_noir">
+    <path id="maillot" class="cls-2" d="M217.47,288.62l4.62,18.56,7.36,1.12,27.32,8.39,14.19,3.91,14.71.56-.53,9.51v14.54l6.83,30.19,5.25,22.36v1.68h-24.69l-13.14-27.96-1.58-3.91-1.05-.56-1.58,6.71-6.83,21.25-1.58,4.47-10.51.56h-79.86l-2.63-2.8-7.36-19.57-3.68-9.51-1.05-.56-1.05,3.91-6.31,12.3-7.36,15.1-.53.56h-17.34l-8.93-.56,1.05-6.15,3.68-12.86,4.2-13.42,5.25-19.01.53-12.86-.53-11.74,14.19-1.12,9.46-2.24,32.05-10.06,5.78-1.68h0l6.08-19.12"/>
+    <path id="badge" class="cls-12" d="M238.94,356.99h4.73v24.7l-6.31,5.25-3.68,3.15-2.1-.53-8.93-6.83-1.58-1.58-.53-2.1-.53-21.02.53-.53,18.39-.53Z"/>
+  </g>
+  <g id="cheveux-2" data-name="cheveux">
+    <polyline id="cheveux-3" data-name="cheveux" class="cls-10" points="217.47 288.62 234.96 310.79 249.57 286.52 281.69 323.85 309.69 280.74 309.69 158.07 266.57 101.19 142.57 101.19 94.57 159.41 98.13 288.62 136.13 323.85 154.97 288.62 169.6 310.7 181.93 288.62 217.47 288.62"/>
+  </g>
+  <g id="visage">
+    <path id="visage-2" data-name="visage" class="cls-11" d="M136.19,216.56l64.59-73.59,63.64,69.56-12.81,44.35c-.54,1.74-1.54,3.29-2.9,4.5-8.24,7.33-38.41,34.08-42.82,36.37-5.11,2.67-11.78,0-11.78,0l-42.69-31.95c-1.81-1.35-3.1-3.27-3.68-5.45l-11.56-43.78"/>
+  </g>
+  <g id="bouche-2" data-name="bouche">
+    <polyline id="bouche-3" data-name="bouche" class="cls-5" points="186.44 257.26 186.44 263.04 200.78 268.85 215.66 263.04 215.66 257.26"/>
+  </g>
+  <g id="yeux-4" data-name="yeux">
+    <g id="oeil_gauche" data-name="oeil gauche">
+      <path id="paupiere" class="cls-6" d="M176.08,205.96c6.74,5.45,8.2,23.55-11,24.06s-17.19-23.51-17.19-23.51"/>
+      <g>
+        <ellipse id="conteneur-pupille" class="cls-9" cx="165.78" cy="215.3" rx="8.71" ry="8.78"/>
+        <path id="pupille" class="cls-9" d="M165.73,216.13s-.75-.04-.26-.52c.9-.89,1.72.35,1.14.99-.59.65-1.91.53-2.39-.09-.52-.69-.36-1.88.73-2.25s2.87-.06,3.15,1.19-.37,2.21-1.75,2.71-3.03.1-3.83-1c-.98-1.36-.59-2.92-.32-3.42.51-.93,1.75-1.89,4.09-1.91s3.61,1.7,3.88,3.03c.33,1.58-.28,3.14-1.94,4.23s-5.08.97-6.13.08-1.88-2.03-1.99-4.25c-.13-2.42,1.56-4,3.8-4.68,3.02-.91,4.88.41,5.89.93.8.41,1.78,1.62,2.2,3.47s.13,4.16-1.39,5.55c-2.13,1.94-5.87,2.06-6.98,1.72s-2.08-.97-3.6-2.42c-.88-.83-1.4-2.33-1.68-3.4s-.27-2.71.21-3.85c1.06-2.5,2.76-3.29,3.63-3.71,2.08-1.01,6.39-1.04,9.58,2.35,1.9,2.02,3.74,6.12-.26,10.51-4.96,5.44-12.09.11-13.33-1.77"/>
+      </g>
+      <polyline id="cil" class="cls-8" points="187.57 216.37 174.68 205.25 147.89 206.51 137.27 201.46"/>
+    </g>
+    <g id="oeil_droit" data-name="oeil droit">
+      <path id="paupiere-2" data-name="paupiere" class="cls-6" d="M223.3,205.51c-6.74,5.45-8.2,23.55,11,24.06s17.19-23.51,17.19-23.51"/>
+      <g id="pupille-2" data-name="pupille">
+        <ellipse id="conteneur-pupille-2" data-name="conteneur-pupille" class="cls-7" cx="233.61" cy="214.85" rx="8.71" ry="8.78"/>
+        <path id="pupille-spirale" class="cls-7" d="M233.65,215.68s.75-.04.26-.52c-.9-.89-1.72.35-1.14.99.59.65,1.91.53,2.39-.09.52-.69.36-1.88-.73-2.25s-2.87-.06-3.15,1.19.37,2.21,1.75,2.71,3.03.1,3.83-1c.98-1.36.59-2.92.32-3.42-.51-.93-1.75-1.89-4.09-1.91s-3.61,1.7-3.88,3.03c-.33,1.58.28,3.14,1.94,4.23s5.08.97,6.13.08,1.88-2.03,1.99-4.25c.13-2.42-1.56-4-3.8-4.68-3.02-.91-4.88.41-5.89.93-.8.41-1.78,1.62-2.2,3.47s-.13,4.16,1.39,5.55c2.13,1.94,5.87,2.06,6.98,1.72s2.08-.97,3.6-2.42c.88-.83,1.4-2.33,1.68-3.4s.27-2.71-.21-3.85c-1.06-2.5-2.76-3.29-3.63-3.71-2.08-1.01-6.39-1.04-9.58,2.35-1.9,2.02-3.74,6.12.26,10.51,4.96,5.44,12.09.11,13.33-1.77"/>
+      </g>
+      <polyline id="cil-2" data-name="cil" class="cls-8" points="211.81 215.92 224.7 204.8 251.5 206.07 262.11 201.01"/>
+    </g>
+  </g>
+  <g id="sourcils-2" data-name="sourcils">
+    <g>
+      <line class="cls-5" x1="215.89" y1="193.04" x2="245.75" y2="193.04"/>
+      <line class="cls-5" x1="156.33" y1="193.04" x2="186.19" y2="193.04"/>
+    </g>
+  </g>
+</svg>

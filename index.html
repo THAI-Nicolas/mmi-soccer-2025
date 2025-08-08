@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MMI Soccer 2025 - Character Selection</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Musique de fond pour la sélection -->
+    <audio id="menu-music" loop preload="auto">
+      <source src="assets/sons/musique-menu.mp3" type="audio/mpeg" />
+    </audio>
+
+    <!-- Son de clic de bouton -->
+    <audio id="button-click-sound" preload="auto">
+      <source src="assets/sons/button-click.mp3" type="audio/mpeg" />
+    </audio>
+
+    <div id="loading-screen" class="loading-screen">
+      <div class="field-background">
+        <div class="field-overlay"></div>
+        <div class="field-grid"></div>
+        <div class="field-glow"></div>
+      </div>
+
+      <div class="energy-particles">
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+        <div class="particle p4"></div>
+        <div class="particle p5"></div>
+      </div>
+
+      <div class="loading-content">
+        <!-- Titre futuriste -->
+        <div class="loading-title">
+          <h1 class="cyber-title">
+            <span class="title-main">MMI</span>
+            <span class="title-sub">SOCCER</span>
+            <span class="title-year">2025</span>
+          </h1>
+          <div class="title-glitch">INITIALISATION...</div>
+        </div>
+
+        <div class="ball-container">
+          <div class="hologram-ring ring-1"></div>
+          <div class="hologram-ring ring-2"></div>
+          <div class="hologram-ring ring-3"></div>
+          <div class="soccer-ball-3d">
+            <div class="ball-core"></div>
+            <div class="ball-glow"></div>
+          </div>
+          <div class="data-streams">
+            <div class="stream stream-1"></div>
+            <div class="stream stream-2"></div>
+            <div class="stream stream-3"></div>
+            <div class="stream stream-4"></div>
+          </div>
+        </div>
+
+        <div class="cyber-progress">
+          <div class="progress-container">
+            <div class="progress-label">CHARGEMENT SYSTÈME</div>
+            <div class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+              <div class="progress-segments">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+              </div>
+            </div>
+            <div class="progress-percentage">
+              <span id="loading-percentage">0</span>%
+            </div>
+          </div>
+        </div>
+
+        <div class="loading-messages">
+          <div id="loading-message" class="cyber-message">
+            Analyse des conditions de terrain...
+          </div>
+          <div class="message-cursor">_</div>
+        </div>
+
+        <div class="system-status">
+          <div class="status-item">
+            <span class="status-label">JOUEURS</span>
+            <span class="status-value">PRÊT</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">TERRAIN</span>
+            <span class="status-value">ACTIF</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">SYSTÈME</span>
+            <span class="status-value" id="system-status">CHARGEMENT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="particles"></div>
+
+    <div class="game-interface hidden">
+      <header class="game-header">
+        <div class="header-glow"></div>
+        <h1 class="game-title">
+          <span class="title-main">MMI</span>
+          <span class="title-sub">SOCCER</span>
+          <span class="title-year">2025</span>
+        </h1>
+        <div class="header-subtitle">CHOISISSEZ VOTRE JOUEUR</div>
+      </header>
+
+      <main class="main-container">
+        <section class="info-panel">
+          <div class="panel-background"></div>
+          <div class="panel-content">
+            <div class="player-badge">
+              <div class="badge-glow"></div>
+              <div class="player-info">
+                <h2 id="player-name" class="player-name">Juline</h2>
+                <p id="player-role" class="player-role">Ailière</p>
+                <p id="player-description" class="player-description">
+                  Dribbleuse rapide – Elle peut casser des reins en TD comme sur
+                  le terrain
+                </p>
+              </div>
+            </div>
+
+            <div class="stats-section">
+              <h3 class="stats-title">CAPACITÉS</h3>
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-name">VITESSE</span>
+                  <span id="stat-speed" class="stat-value">96</span>
+                </div>
+                <div class="stat-bar">
+                  <div id="bar-speed" class="stat-fill speed-bar"></div>
+                  <div class="stat-glow speed-glow"></div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-name">TIR</span>
+                  <span id="stat-shooting" class="stat-value">74</span>
+                </div>
+                <div class="stat-bar">
+                  <div id="bar-shooting" class="stat-fill shooting-bar"></div>
+                  <div class="stat-glow shooting-glow"></div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-name">PASSE</span>
+                  <span id="stat-passing" class="stat-value">82</span>
+                </div>
+                <div class="stat-bar">
+                  <div id="bar-passing" class="stat-fill passing-bar"></div>
+                  <div class="stat-glow passing-glow"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="character-display">
+          <div class="character-spotlight"></div>
+          <div class="character-platform">
+            <div class="platform-glow"></div>
+            <div id="main-avatar" class="main-character">
+              <div class="character-border">
+                <div class="character-content">
+                  <div
+                    id="character-icon"
+                    class="character-icon nicolas-avatar"
+                  ></div>
+                </div>
+                <div class="character-effects">
+                  <div class="effect-ring ring-1"></div>
+                  <div class="effect-ring ring-2"></div>
+                  <div class="effect-ring ring-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="character-action">
+            <button id="select-player-btn" class="action-button">
+              <div class="button-background"></div>
+              <div class="button-border"></div>
+              <div class="button-content">
+                <span class="button-text">SÉLECTIONNER JOUEUR</span>
+                <div class="button-glow"></div>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <section class="selection-panel">
+          <div class="panel-background"></div>
+          <div class="panel-content">
+            <h3 class="selection-title">SÉLECTION JOUEUR</h3>
+            <div class="character-grid">
+              <div class="character-slot active" data-player="0">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon nicolas-avatar"></div>
+                  <div class="slot-name">Nicolas</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="1">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon andrea-avatar"></div>
+                  <div class="slot-name">Andréa</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="2">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon paul-avatar"></div>
+                  <div class="slot-name">Paul</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="3">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon juline-avatar"></div>
+                  <div class="slot-name">Juline</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="4">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon mathis-avatar"></div>
+                  <div class="slot-name">Mathis</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="5">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon margaux-avatar"></div>
+                  <div class="slot-name">Margaux</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="6">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon jules-avatar"></div>
+                  <div class="slot-name">Jules</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="7">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon solene-avatar"></div>
+                  <div class="slot-name">Solène</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+              <div class="character-slot" data-player="8">
+                <div class="slot-background"></div>
+                <div class="slot-border"></div>
+                <div class="slot-content">
+                  <div class="slot-icon francois-avatar"></div>
+                  <div class="slot-name">François</div>
+                </div>
+                <div class="slot-glow"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="avatar-modal" class="avatar-modal hidden">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-player-name" class="modal-title">Nicolas</h2>
+          <button id="close-modal" class="close-button">
+            <span class="close-icon">×</span>
+          </button>
+        </div>
+        <div class="modal-avatar-container">
+          <div class="modal-avatar-glow"></div>
+          <div id="modal-avatar" class="modal-avatar nicolas-avatar"></div>
+          <div class="modal-effects">
+            <div class="modal-ring ring-1"></div>
+            <div class="modal-ring ring-2"></div>
+            <div class="modal-ring ring-3"></div>
+          </div>
+        </div>
+        <div class="modal-info">
+          <p id="modal-player-position" class="modal-position">
+            Milieu offensif
+          </p>
+          <p id="modal-player-description" class="modal-description">
+            Ambidextre en stats comme en charisme. Vision du jeu + pizza à la
+            main : passe décisive garantie.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirmation-modal" class="confirmation-modal hidden">
+      <div class="confirmation-background"></div>
+      <div class="confirmation-content">
+        <div class="confirmation-header">
+          <div class="confirmation-icon">⚽</div>
+          <h2 class="confirmation-title">JOUEUR SÉLECTIONNÉ !</h2>
+        </div>
+        <div class="confirmation-body">
+          <div class="selected-player-info">
+            <div class="confirmation-avatar-container">
+              <div
+                id="confirmation-avatar"
+                class="confirmation-avatar nicolas-avatar"
+              ></div>
+            </div>
+            <div class="player-details">
+              <h3
+                id="confirmation-player-name"
+                class="confirmation-player-name"
+              >
+                Nicolas
+              </h3>
+              <p
+                id="confirmation-player-position"
+                class="confirmation-player-position"
+              >
+                Milieu offensif
+              </p>
+            </div>
+          </div>
+          <div class="stats-display">
+            <div class="stat-display-item">
+              <span class="stat-display-label">VITESSE</span>
+              <span id="confirmation-speed" class="stat-display-value">83</span>
+            </div>
+            <div class="stat-display-item">
+              <span class="stat-display-label">TIR</span>
+              <span id="confirmation-shooting" class="stat-display-value"
+                >79</span
+              >
+            </div>
+            <div class="stat-display-item">
+              <span class="stat-display-label">PASSE</span>
+              <span id="confirmation-passing" class="stat-display-value"
+                >91</span
+              >
+            </div>
+          </div>
+          <div class="confirmation-message">Prêt à dominer le terrain ?</div>
+        </div>
+        <div class="confirmation-actions">
+          <button id="confirm-selection" class="confirmation-btn confirm-btn">
+            <div class="btn-background"></div>
+            <div class="btn-border"></div>
+            <span class="btn-text">COMMENCER LE MATCH</span>
+            <div class="btn-glow"></div>
+          </button>
+          <button id="cancel-selection" class="confirmation-btn cancel-btn">
+            <div class="btn-background"></div>
+            <div class="btn-border"></div>
+            <span class="btn-text">RETOUR</span>
+            <div class="btn-glow"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="game/penalty-embed.js"></script>
+  </body>
+</html>

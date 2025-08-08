@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pénalty 3D — Sandbox</title>
+    <link rel="stylesheet" href="penalty.css" />
+  </head>
+  <body>
+    <div id="scene"></div>
+    <div
+      class="hud"
+      style="
+        left: 16px;
+        top: 12px;
+        position: absolute;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 8px 10px;
+        color: #e5e7eb;
+        font-family: system-ui, Segoe UI, Roboto;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          font-weight: 800;
+          letter-spacing: 0.02em;
+        "
+      >
+        <span>ATT</span>
+        <span id="sb-score">0 — 0</span>
+        <span>GAR</span>
+      </div>
+      <div
+        class="hud-sub"
+        id="hud-score"
+        style="opacity: 0.9; font-size: 0.9rem; margin-top: 4px"
+      >
+        Buts 0 — Tirs 0/5
+      </div>
+      <div
+        class="hud-sub"
+        id="hud-result"
+        style="opacity: 0.9; font-size: 0.9rem; margin-top: 2px"
+      >
+        —
+      </div>
+    </div>
+    <div
+      class="hud"
+      style="
+        right: 16px;
+        top: 12px;
+        position: absolute;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 8px 10px;
+        color: #e5e7eb;
+        font-family: system-ui, Segoe UI, Roboto;
+        min-width: 160px;
+      "
+    >
+      <div style="font-weight: 800; letter-spacing: 0.02em; margin-bottom: 6px">
+        Contrôles
+      </div>
+      <div
+        style="
+          opacity: 0.9;
+          font-size: 0.9rem;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        "
+      >
+        <div>Maintiens pour charger</div>
+        <div>Relâche pour tirer</div>
+        <div>Cible peut dépasser la cage</div>
+      </div>
+      <div style="margin-top: 8px; display: flex; gap: 8px">
+        <button id="btn-restart" style="display: none">Rejouer</button>
+        <button id="btn-exit" style="display: none">Retour</button>
+        <button id="btn-music">Musique: Off</button>
+      </div>
+      <div
+        class="hud-sub"
+        id="hud-power"
+        style="
+          width: 160px;
+          height: 6px;
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          border-radius: 4px;
+          overflow: hidden;
+          margin-top: 8px;
+        "
+      >
+        <div
+          id="hud-power-fill"
+          style="
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #22d3ee, #3b82f6);
+          "
+        ></div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="penalty.js"></script>
+  </body>
+</html>
