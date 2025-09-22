@@ -952,156 +952,13 @@
     updateHUD();
   }
 
-  function showEndMatchPopup() {
-    console.log("=== DEBUT showEndMatchPopup ===");
-    console.log("Scores:", scoreATT, "vs", scoreGAR);
-
-    // Créer la popup de fin de match
-    const popupHtml = `
-      <div id="end-match-popup" style="
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(0, 0, 0, 0.9) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 999999 !important;
-        font-family: 'Orbitron', monospace !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-      ">
-        <div style="
-          background: linear-gradient(135deg, rgba(1,73,175,0.3), rgba(0,0,0,0.95)) !important;
-          border: 3px solid rgba(1,73,175,0.6) !important;
-          border-radius: 20px !important;
-          padding: 40px !important;
-          text-align: center !important;
-          color: #e5e7eb !important;
-          min-width: 450px !important;
-          box-shadow: 0 0 40px rgba(1,73,175,0.5) !important;
-          position: relative !important;
-          z-index: 999999 !important;
-        ">
-          <div style="
-            font-size: 2.5rem; 
-            font-weight: 800; 
-            color: ${
-              scoreATT > scoreGAR
-                ? "#22d3ee"
-                : scoreATT === scoreGAR
-                ? "#f59e0b"
-                : "#ef4444"
-            }; 
-            margin-bottom: 25px; 
-            text-shadow: 0 0 15px ${
-              scoreATT > scoreGAR
-                ? "#22d3ee"
-                : scoreATT === scoreGAR
-                ? "#f59e0b"
-                : "#ef4444"
-            };
-          ">
-            ${
-              scoreATT > scoreGAR
-                ? "VICTOIRE !"
-                : scoreATT === scoreGAR
-                ? "MATCH NUL !"
-                : "DÉFAITE !"
-            }
-          </div>
-          <div style="font-size: 1.3rem; margin-bottom: 15px; color: #b0b7c3;">
-            Score Final
-          </div>
-          <div style="font-size: 1.8rem; margin-bottom: 20px; color: #1fb6ff; font-weight: 700;">
-            Attaquant ${scoreATT} - ${scoreGAR} Gardien
-          </div>
-          <div style="margin-bottom: 35px; color: #9ca3af; font-size: 1.1rem;">
-            Buts marqués: ${sessionGoals}/${TOTAL_SHOTS}
-          </div>
-          <div style="display: flex; gap: 25px; justify-content: center;">
-            <button onclick="restartMatch()" style="
-              background: linear-gradient(135deg, rgba(1,73,175,0.9), rgba(1,73,175,0.7));
-              border: 2px solid rgba(1,73,175,0.8);
-              border-radius: 12px;
-              padding: 15px 30px;
-              color: white;
-              font-family: inherit;
-              font-weight: 700;
-              font-size: 1rem;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              text-transform: uppercase;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              REJOUER
-            </button>
-            <button onclick="exitMatch()" style="
-              background: linear-gradient(135deg, rgba(120,120,120,0.9), rgba(100,100,100,0.7));
-              border: 2px solid rgba(120,120,120,0.8);
-              border-radius: 12px;
-              padding: 15px 30px;
-              color: white;
-              font-family: inherit;
-              font-weight: 700;
-              font-size: 1rem;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              text-transform: uppercase;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              RETOUR
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    // Injecter la popup dans le DOM
-    console.log("Injection de la popup dans le DOM...");
-    document.body.insertAdjacentHTML("beforeend", popupHtml);
-
-    // Vérifier si la popup a été créée
-    const createdPopup = document.getElementById("end-match-popup");
-    console.log("Popup créée ?", createdPopup ? "OUI" : "NON");
-    if (createdPopup) {
-      console.log("Style de la popup:", createdPopup.style.cssText);
-      console.log(
-        "Popup visible ?",
-        window.getComputedStyle(createdPopup).display
-      );
-      console.log(
-        "Z-index calculé:",
-        window.getComputedStyle(createdPopup).zIndex
-      );
-      console.log("Parent de la popup:", createdPopup.parentElement.tagName);
-    }
-
-    // Jouer le son selon le résultat
-    if (scoreATT > scoreGAR) {
-      console.log("Jouer son de victoire");
-      setTimeout(() => sfxWin(), 500);
-    } else if (scoreATT < scoreGAR) {
-      console.log("Jouer son de défaite");
-      setTimeout(() => sfxLoss(), 500);
-    }
-  }
-
   function endSession() {
-    console.log("=== ENDsession APPELÉE ===");
-    console.log("sessionShots:", sessionShots, "TOTAL_SHOTS:", TOTAL_SHOTS);
     sessionOver = true;
-    showEndMatchPopup();
+    if (resultEl) resultEl.textContent = `Fin: ${sessionGoals}/${TOTAL_SHOTS}`;
+    if (btnRestart) btnRestart.style.display = "inline-block";
+    if (btnExit) btnExit.style.display = "inline-block";
   }
   function resetSession() {
-    // Arrêter tous les sons en cours
-    if (currentResultAudio) {
-      currentResultAudio.pause();
-      currentResultAudio.currentTime = 0;
-      currentResultAudio = null;
-    }
-
     sessionShots = 0;
     sessionGoals = 0;
     scoreATT = 0;
@@ -1421,33 +1278,21 @@
           goalZ
         );
 
-        // Détection plus précise des poteaux
-        const leftPostX = -goalWidth / 2;
-        const rightPostX = goalWidth / 2;
-        const crossbarY = goalHeight;
-
-        // Vérifier collision avec poteau gauche (cylindre vertical)
-        const hitLeftPost =
-          ballAtLine.x >= leftPostX - postR - ballRadius &&
-          ballAtLine.x <= leftPostX + postR + ballRadius &&
-          ballAtLine.y >= 0 &&
-          ballAtLine.y <= goalHeight;
-
-        // Vérifier collision avec poteau droit (cylindre vertical)
-        const hitRightPost =
-          ballAtLine.x >= rightPostX - postR - ballRadius &&
-          ballAtLine.x <= rightPostX + postR + ballRadius &&
-          ballAtLine.y >= 0 &&
-          ballAtLine.y <= goalHeight;
-
-        // Vérifier collision avec barre transversale (cylindre horizontal)
-        const hitCrossbar =
-          ballAtLine.y >= crossbarY - postR - ballRadius &&
-          ballAtLine.y <= crossbarY + postR + ballRadius &&
-          ballAtLine.x >= leftPostX &&
-          ballAtLine.x <= rightPostX;
-
-        const hitPost = hitLeftPost || hitRightPost || hitCrossbar;
+        const postLeft = new THREE.Vector3(
+          -goalWidth / 2,
+          goalHeight / 2,
+          goalZ
+        );
+        const postRight = new THREE.Vector3(
+          goalWidth / 2,
+          goalHeight / 2,
+          goalZ
+        );
+        const cross = new THREE.Vector3(0, goalHeight, goalZ);
+        const hitPost =
+          postLeft.distanceTo(ballAtLine) <= postR + ballRadius + 0.02 ||
+          postRight.distanceTo(ballAtLine) <= postR + ballRadius + 0.02 ||
+          cross.distanceTo(ballAtLine) <= postR + ballRadius + 0.02;
 
         const insideX =
           ballAtLine.x >= -goalWidth / 2 + postR + ballRadius &&
@@ -1458,17 +1303,7 @@
         const inGoalRect = insideX && insideY;
 
         let result = "BUT";
-        // Déterminer le type de résultat
-        if (hitPost) {
-          result = "POTEAU";
-          let postType = "";
-          if (hitLeftPost) postType = "POTEAU GAUCHE";
-          else if (hitRightPost) postType = "POTEAU DROIT";
-          else if (hitCrossbar) postType = "BARRE TRANSVERSALE";
-          console.log(`${postType} TOUCHÉ! Position balle:`, ballAtLine);
-        } else if (!inGoalRect) {
-          result = "RATÉ";
-        }
+        if (!inGoalRect || hitPost) result = "RATÉ";
 
         if (result === "BUT") {
           if (gloveL && gloveR) {
@@ -1488,29 +1323,24 @@
             console.log("Rayon d'arrêt:", saveRadius);
             console.log("Arrêt détecté?", saved);
           }
-
-          if (saved) result = "ARRÊT";
         }
+        if (saved) result = "ARRÊT";
 
         if (result === "BUT") {
           sessionGoals++;
           handleShotResult("BUT");
           spawnParticles(ballAtLine, 0x22d3ee, 18);
           sfxGoal();
-        } else if (result === "POTEAU") {
-          handleShotResult("RATÉ");
-          spawnParticles(ballAtLine, 0xef4444, 14);
-          sfxPostHit();
         } else if (result === "ARRÊT") {
           handleShotResult("ARRÊT");
           spawnParticles(ballAtLine, 0xf97316, 14);
+          sfxSave();
         } else {
           handleShotResult("RATÉ");
           spawnParticles(ballAtLine, 0xef4444, 14);
         }
         sessionShots += 1;
         updateHUD();
-
         // Jouer l'animation de résultat du joueur
         playPlayerResultAnimation(result);
         if (resultEl) {
@@ -1606,8 +1436,6 @@
   let lastVoiceAt = 0;
   const minVoiceCooldownMs = 3500;
   const voicePlayProbability = 0.6;
-  let currentVoiceAudio = null;
-  let currentResultAudio = null;
 
   function playVoice() {
     try {
@@ -1631,20 +1459,8 @@
       try {
         a.crossOrigin = "anonymous";
       } catch {}
-      a.volume = 0.4;
-
-      // Suivre l'audio de voix en cours
-      currentVoiceAudio = a;
-      a.addEventListener("ended", () => {
-        currentVoiceAudio = null;
-      });
-      a.addEventListener("error", () => {
-        currentVoiceAudio = null;
-      });
-
-      a.play().catch(() => {
-        currentVoiceAudio = null;
-      });
+      a.volume = 0.9;
+      a.play().catch(() => {});
     } catch {}
   }
 
@@ -1672,104 +1488,6 @@
     }
   }
 
-  function onKeyDown(e) {
-    // Touche Échap (code 27 ou "Escape")
-    if (e.key === "Escape" || e.keyCode === 27) {
-      e.preventDefault();
-      showPausePopup();
-    }
-  }
-
-  function showPausePopup() {
-    // Ne pas ouvrir la popup si le jeu est déjà terminé ou s'il y a déjà une popup
-    if (
-      sessionOver ||
-      document.getElementById("pause-popup") ||
-      document.getElementById("end-match-popup")
-    ) {
-      return;
-    }
-
-    const popupHtml = `
-      <div id="pause-popup" style="
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(0, 0, 0, 0.8) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 999999 !important;
-        font-family: 'Orbitron', monospace !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-      ">
-        <div style="
-          background: linear-gradient(135deg, rgba(1,73,175,0.3), rgba(0,0,0,0.95)) !important;
-          border: 3px solid rgba(1,73,175,0.6) !important;
-          border-radius: 20px !important;
-          padding: 40px !important;
-          text-align: center !important;
-          color: #e5e7eb !important;
-          min-width: 400px !important;
-          box-shadow: 0 0 40px rgba(1,73,175,0.5) !important;
-          position: relative !important;
-          z-index: 999999 !important;
-        ">
-          <div style="
-            font-size: 2.2rem; 
-            font-weight: 800; 
-            color: #1fb6ff; 
-            margin-bottom: 25px; 
-            text-shadow: 0 0 15px #1fb6ff;
-          ">
-            PAUSE
-          </div>
-          <div style="font-size: 1.1rem; margin-bottom: 35px; color: #b0b7c3;">
-            Que voulez-vous faire ?
-          </div>
-          <div style="display: flex; gap: 25px; justify-content: center;">
-            <button onclick="resumeGame()" style="
-              background: linear-gradient(135deg, rgba(1,73,175,0.9), rgba(1,73,175,0.7));
-              border: 2px solid rgba(1,73,175,0.8);
-              border-radius: 12px;
-              padding: 15px 30px;
-              color: white;
-              font-family: inherit;
-              font-weight: 700;
-              font-size: 1rem;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              text-transform: uppercase;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              CONTINUER
-            </button>
-            <button onclick="exitFromPause()" style="
-              background: linear-gradient(135deg, rgba(200,60,60,0.9), rgba(180,50,50,0.7));
-              border: 2px solid rgba(200,60,60,0.8);
-              border-radius: 12px;
-              padding: 15px 30px;
-              color: white;
-              font-family: inherit;
-              font-weight: 700;
-              font-size: 1rem;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              text-transform: uppercase;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              RETOUR
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML("beforeend", popupHtml);
-  }
-
   function resize() {
     const w = container.clientWidth || window.innerWidth;
     const h = container.clientHeight || window.innerHeight;
@@ -1784,10 +1502,6 @@
   renderer.domElement.addEventListener("pointerdown", onPointerDown);
   renderer.domElement.addEventListener("pointerup", onPointerUp);
   renderer.domElement.addEventListener("pointercancel", onPointerUp);
-
-  // Écouter la touche Échap pour la pause
-  document.addEventListener("keydown", onKeyDown);
-
   resize();
 
   let __rafId;
@@ -1933,7 +1647,7 @@
       bgmAudio.crossOrigin = "anonymous";
     } catch {}
     bgmAudio.loop = true;
-    bgmAudio.volume = 0.3;
+    bgmAudio.volume = 0.6;
     bgmAudio.addEventListener(
       "canplaythrough",
       () => {
@@ -1979,127 +1693,20 @@
       o.stop(audioCtx.currentTime + duration);
     } catch {}
   }
-
-  function playSoundFile(src, volume = 0.8) {
-    try {
-      resumeAudioIfNeeded();
-      const audio = new Audio(src);
-      try {
-        audio.crossOrigin = "anonymous";
-      } catch {}
-      audio.volume = volume;
-      audio.play().catch(() => {});
-    } catch {}
-  }
-
-  function playResultSound(src, volume = 0.8) {
-    try {
-      // Arrêter le son de résultat précédent s'il y en a un
-      if (currentResultAudio) {
-        currentResultAudio.pause();
-        currentResultAudio.currentTime = 0;
-        currentResultAudio = null;
-      }
-
-      resumeAudioIfNeeded();
-      const audio = new Audio(src);
-      try {
-        audio.crossOrigin = "anonymous";
-      } catch {}
-      audio.volume = volume;
-
-      // Suivre cet audio comme audio de résultat
-      currentResultAudio = audio;
-      audio.addEventListener("ended", () => {
-        currentResultAudio = null;
-      });
-      audio.addEventListener("error", () => {
-        currentResultAudio = null;
-      });
-
-      audio.play().catch(() => {
-        currentResultAudio = null;
-      });
-    } catch {}
-  }
-
   function sfxShoot() {
-    playSoundFile("game/assets/shoot-sound.mp3", 0.9);
+    playBeep(520, 0.07, 0.15);
   }
   function sfxGoal() {
-    playSoundFile("game/assets/ball-in-the-net-sound.mp3", 1.0);
+    playBeep(880, 0.12, 0.2);
+    setTimeout(() => playBeep(1175, 0.12, 0.2), 90);
   }
-  function sfxPostHit() {
-    playSoundFile("game/assets/hit-the-post-sound.mp3", 0.9);
-  }
-  function sfxLoss() {
-    // Ne pas jouer le son de défaite si une voix est en cours
-    if (
-      currentVoiceAudio &&
-      !currentVoiceAudio.ended &&
-      !currentVoiceAudio.paused
-    ) {
-      console.log("Son de défaite bloqué car voix en cours");
-      return;
-    }
-    playResultSound("game/assets/loss-sound.mp3", 0.4);
-  }
-
-  function sfxWin() {
-    playResultSound("game/assets/win-sound.mp3", 0.8);
+  function sfxSave() {
+    playBeep(300, 0.12, 0.2);
   }
 
   window.setMusicURL = function (url) {
     setMusicSource(url);
     if (!musicOn) toggleMusic();
-  };
-
-  // Fonctions globales pour les boutons de la popup
-  window.restartMatch = function () {
-    // Arrêter immédiatement le son de résultat
-    if (currentResultAudio) {
-      currentResultAudio.pause();
-      currentResultAudio.currentTime = 0;
-      currentResultAudio = null;
-    }
-
-    const popup = document.getElementById("end-match-popup");
-    if (popup) popup.remove();
-    resetSession();
-    updateHUD();
-  };
-
-  window.exitMatch = function () {
-    // Arrêter immédiatement le son de résultat
-    if (currentResultAudio) {
-      currentResultAudio.pause();
-      currentResultAudio.currentTime = 0;
-      currentResultAudio = null;
-    }
-
-    // Nettoyer le jeu avant de recharger
-    if (window.__penaltyCleanup) window.__penaltyCleanup();
-
-    // Actualiser la page pour revenir à l'écran de sélection
-    window.location.reload();
-  };
-
-  // Fonctions pour la popup de pause
-  window.resumeGame = function () {
-    const popup = document.getElementById("pause-popup");
-    if (popup) popup.remove();
-  };
-
-  window.exitFromPause = function () {
-    // Même comportement que exitMatch : actualiser la page
-    if (currentResultAudio) {
-      currentResultAudio.pause();
-      currentResultAudio.currentTime = 0;
-      currentResultAudio = null;
-    }
-
-    if (window.__penaltyCleanup) window.__penaltyCleanup();
-    window.location.reload();
   };
 
   const defaultMusic = (function () {
@@ -2137,7 +1744,6 @@
     } catch {}
     try {
       window.removeEventListener("resize", resize);
-      document.removeEventListener("keydown", onKeyDown);
     } catch {}
 
     try {
