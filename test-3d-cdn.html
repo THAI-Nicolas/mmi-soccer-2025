@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Import 3D avec CDN</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 800px;
+        height: 600px;
+        border: 2px solid #333;
+        margin: 20px 0;
+      }
+      #info {
+        background: #333;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .status {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .loading {
+        color: #2196f3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test d'Import 3D avec CDN Three.js</h1>
+
+    <div id="info">
+      <div class="status loading" id="status">Initialisation...</div>
+      <div id="details"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Utilisation du CDN Three.js officiel -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      function updateStatus(message, type = "loading") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+        console.log(message);
+      }
+
+      function addDetail(message) {
+        const div = document.createElement("div");
+        div.textContent = message;
+        detailsEl.appendChild(div);
+        console.log(message);
+      }
+
+      try {
+        updateStatus("Vérification de THREE.js...", "loading");
+
+        addDetail("✓ THREE.js chargé via CDN (version " + THREE.REVISION + ")");
+        addDetail("✓ GLTFLoader importé via ES modules");
+
+        updateStatus("Création de la scène 3D...", "loading");
+
+        // Configuration de base
+        const container = document.getElementById("container");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x222222);
+
+        const camera = new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000);
+        camera.position.set(0, 0, 5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(800, 600);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Éclairage
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        addDetail("✓ Scène 3D créée");
+
+        // Ajout d'un cube de test d'abord
+        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const cubeMaterial = new THREE.MeshStandardMaterial({
+          color: 0x00ff00,
+        });
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set(-2, 0, 0);
+        scene.add(cube);
+        addDetail("✓ Cube de test ajouté");
+
+        updateStatus("Chargement du modèle soccer-ball.glb...", "loading");
+
+        // Test du chargement GLB avec le vrai GLTFLoader
+        const loader = new GLTFLoader();
+        loader.load(
+          "game/assets/models/objects/soccer-ball.glb",
+          function (gltf) {
+            updateStatus("Modèle chargé avec succès!", "success");
+            addDetail("✓ Fichier GLB lu correctement");
+
+            const ball = gltf.scene;
+            ball.position.set(2, 0, 0);
+            ball.scale.setScalar(2);
+
+            ball.traverse(function (node) {
+              if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+                addDetail(`✓ Mesh trouvé: ${node.name || "sans nom"}`);
+              }
+            });
+
+            scene.add(ball);
+            addDetail("✓ Modèle ajouté à la scène");
+          },
+          function (progress) {
+            const percent = Math.round(
+              (progress.loaded / progress.total) * 100
+            );
+            addDetail(`Progression: ${percent}%`);
+          },
+          function (error) {
+            updateStatus("Erreur lors du chargement!", "error");
+            addDetail(`✗ Erreur: ${error.message || error}`);
+            console.error("Détails de l'erreur:", error);
+          }
+        );
+
+        // Animation
+        function animate() {
+          requestAnimationFrame(animate);
+
+          // Rotation du cube
+          cube.rotation.x += 0.01;
+          cube.rotation.y += 0.01;
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+        addDetail("✓ Animation démarrée");
+      } catch (error) {
+        updateStatus(`Erreur: ${error.message}`, "error");
+        addDetail(`✗ ${error.message}`);
+        console.error("Erreur complète:", error);
+      }
+    </script>
+  </body>
+</html>

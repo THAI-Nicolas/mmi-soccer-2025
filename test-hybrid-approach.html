@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Approche Hybride</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 800px;
+        height: 600px;
+        border: 2px solid #333;
+        margin: 20px 0;
+      }
+      #info {
+        background: #333;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .status {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .loading {
+        color: #2196f3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Approche Hybride - Style Jeu</h1>
+
+    <div id="info">
+      <div class="status loading" id="status">Initialisation...</div>
+      <div id="details"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Approche hybride : ES modules mais adaptée au jeu -->
+    <script>
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      function updateStatus(message, type = "loading") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+        console.log(message);
+      }
+
+      function addDetail(message) {
+        const div = document.createElement("div");
+        div.textContent = message;
+        detailsEl.appendChild(div);
+        console.log(message);
+      }
+
+      // Fonction pour créer une balle par défaut (comme dans le jeu)
+      function createDefaultBall() {
+        const ballGeom = new THREE.SphereGeometry(0.22, 32, 32);
+        const ballMat = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.6,
+          metalness: 0.1,
+        });
+        const ball = new THREE.Mesh(ballGeom, ballMat);
+        ball.position.set(0, 0.22, -0.5);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        return ball;
+      }
+
+      // Fonction pour charger la balle 3D (comme dans le jeu)
+      function loadSoccerBall(scene, callback) {
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+          "game/assets/models/objects/soccer-ball.glb",
+          function (gltf) {
+            addDetail("✓ Modèle soccer-ball.glb chargé avec succès");
+
+            const ball3D = gltf.scene;
+            ball3D.scale.setScalar(0.44);
+            ball3D.position.set(0, 0.22, -0.5);
+            ball3D.castShadow = true;
+            ball3D.receiveShadow = true;
+
+            ball3D.traverse(function (node) {
+              if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+                addDetail(`✓ Mesh configuré: ${node.name || "sans nom"}`);
+              }
+            });
+
+            callback(ball3D);
+          },
+          function (progress) {
+            const percent = Math.round(
+              (progress.loaded / progress.total) * 100
+            );
+            addDetail(`Progression: ${percent}%`);
+          },
+          function (error) {
+            addDetail(`✗ Erreur chargement: ${error.message || error}`);
+            console.error("Erreur:", error);
+            callback(null); // Callback avec null en cas d'erreur
+          }
+        );
+      }
+
+      // Charger dynamiquement THREE.js et GLTFLoader via ES modules
+      async function loadLibraries() {
+        try {
+          updateStatus(
+            "Chargement des librairies via ES modules...",
+            "loading"
+          );
+
+          // Charger THREE.js
+          const THREE = await import(
+            "https://unpkg.com/three@0.158.0/build/three.module.js"
+          );
+          window.THREE = THREE;
+          addDetail("✓ THREE.js chargé via ES modules");
+
+          // Charger GLTFLoader
+          const { GLTFLoader } = await import(
+            "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js"
+          );
+          window.THREE.GLTFLoader = GLTFLoader;
+          addDetail("✓ GLTFLoader chargé via ES modules");
+
+          return true;
+        } catch (error) {
+          addDetail(`✗ Erreur chargement librairies: ${error.message}`);
+          return false;
+        }
+      }
+
+      // Fonction principale
+      async function initGame() {
+        try {
+          // Charger les librairies
+          const librariesLoaded = await loadLibraries();
+          if (!librariesLoaded) {
+            updateStatus("Erreur chargement des librairies", "error");
+            return;
+          }
+
+          updateStatus("Création de la scène (style jeu)...", "loading");
+
+          // Configuration exacte du jeu
+          const container = document.getElementById("container");
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x0a0f1a);
+          scene.fog = new THREE.Fog(0x0a0f1a, 18, 36);
+
+          const camera = new THREE.PerspectiveCamera(60, 800 / 600, 0.1, 200);
+          camera.position.set(0, 2.2, 6.5);
+          camera.lookAt(0, 1, -8);
+
+          const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: false,
+          });
+          renderer.outputColorSpace = THREE.SRGBColorSpace;
+          renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          renderer.setSize(800, 600);
+          renderer.shadowMap.enabled = true;
+          renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+          container.appendChild(renderer.domElement);
+
+          // Éclairage du jeu
+          const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.6);
+          scene.add(hemi);
+          const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+          dir.position.set(3, 5, 4);
+          dir.castShadow = true;
+          dir.shadow.mapSize.set(1024, 1024);
+          scene.add(dir);
+
+          // Terrain du jeu
+          const fieldGeom = new THREE.PlaneGeometry(20, 40);
+          const fieldMat = new THREE.MeshStandardMaterial({
+            color: 0x0b5d3c,
+            roughness: 0.95,
+            metalness: 0.05,
+          });
+          const field = new THREE.Mesh(fieldGeom, fieldMat);
+          field.rotation.x = -Math.PI / 2;
+          field.receiveShadow = true;
+          scene.add(field);
+
+          addDetail("✓ Scène style jeu créée");
+
+          // Balle par défaut (comme dans le jeu)
+          let ball = createDefaultBall();
+          scene.add(ball);
+          addDetail("✓ Balle par défaut ajoutée");
+
+          updateStatus("Chargement de la balle 3D...", "loading");
+
+          // Essayer de charger la balle 3D
+          loadSoccerBall(scene, function (ball3D) {
+            if (ball3D) {
+              // Remplacer la balle par défaut
+              scene.remove(ball);
+              ball = ball3D;
+              scene.add(ball);
+              updateStatus("Balle 3D chargée avec succès!", "success");
+              addDetail("✓ Balle 3D remplace la balle par défaut");
+            } else {
+              updateStatus("Utilisation de la balle par défaut", "loading");
+              addDetail("→ Balle par défaut conservée");
+            }
+          });
+
+          // Animation
+          function animate() {
+            requestAnimationFrame(animate);
+
+            // Petite rotation de la balle pour tester
+            if (ball) {
+              ball.rotation.x += 0.01;
+              ball.rotation.y += 0.01;
+            }
+
+            renderer.render(scene, camera);
+          }
+
+          animate();
+          addDetail("✓ Rendu démarré");
+        } catch (error) {
+          updateStatus(`Erreur: ${error.message}`, "error");
+          addDetail(`✗ ${error.message}`);
+          console.error("Erreur complète:", error);
+        }
+      }
+
+      // Démarrer
+      initGame();
+    </script>
+  </body>
+</html>

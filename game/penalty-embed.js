@@ -176,7 +176,54 @@
 
     if (!window.THREE) {
       loader.textContent = "Chargement moteur 3D...";
-      await loadScript("https://unpkg.com/three@0.158.0/build/three.min.js");
+      // Nouvelle approche avec ES modules qui fonctionne
+      try {
+        // Ajouter l'importmap
+        const importMap = document.createElement("script");
+        importMap.type = "importmap";
+        importMap.textContent = JSON.stringify({
+          imports: {
+            three: "https://unpkg.com/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/",
+          },
+        });
+        document.head.appendChild(importMap);
+
+        // Charger les modules
+        const THREE = await import(
+          "https://unpkg.com/three@0.158.0/build/three.module.js"
+        );
+        const { GLTFLoader } = await import(
+          "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js"
+        );
+
+        // Exposer globalement pour compatibilité
+        // Gérer le cas où THREE est un module ES avec default export
+        if (THREE.default) {
+          window.THREE = THREE.default;
+        } else {
+          window.THREE = THREE;
+        }
+
+        // S'assurer que GLTFLoader est attaché à THREE
+        window.THREE.GLTFLoader = GLTFLoader;
+
+        // Créer aussi une référence globale directe
+        window.GLTFLoader = GLTFLoader;
+
+        console.log(
+          "THREE.js et GLTFLoader chargés avec succès via ES modules"
+        );
+        console.log("window.THREE:", typeof window.THREE);
+        console.log("window.THREE.GLTFLoader:", typeof window.THREE.GLTFLoader);
+        console.log("window.GLTFLoader:", typeof window.GLTFLoader);
+        console.log("GLTFLoader function:", GLTFLoader);
+      } catch (error) {
+        console.error("Erreur chargement ES modules:", error);
+        // Fallback vers l'ancienne méthode si nécessaire
+        await loadScript("game/lib/three.js");
+        await loadScript("game/lib/GLTFLoader.js");
+      }
     }
 
     loader.textContent = "Chargement du jeu...";

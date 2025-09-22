@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Intégration Jeu avec Balle 3D</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 800px;
+        height: 600px;
+        border: 2px solid #333;
+        margin: 20px 0;
+      }
+      #info {
+        background: #333;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .status {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .loading {
+        color: #2196f3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Intégration Balle 3D dans le Jeu</h1>
+
+    <div id="info">
+      <div class="status loading" id="status">Initialisation...</div>
+      <div id="details"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Chargement direct des scripts -->
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      function updateStatus(message, type = "loading") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+        console.log(message);
+      }
+
+      function addDetail(message) {
+        const div = document.createElement("div");
+        div.textContent = message;
+        detailsEl.appendChild(div);
+        console.log(message);
+      }
+
+      // Attendre que les scripts se chargent
+      setTimeout(() => {
+        try {
+          updateStatus("Vérification des librairies...", "loading");
+
+          if (typeof THREE === "undefined") {
+            throw new Error("THREE.js non chargé");
+          }
+          addDetail("✓ THREE.js chargé (version " + THREE.REVISION + ")");
+
+          if (typeof THREE.GLTFLoader === "undefined") {
+            throw new Error("GLTFLoader non disponible");
+          }
+          addDetail("✓ GLTFLoader disponible");
+
+          updateStatus("Création de la scène (style jeu)...", "loading");
+
+          // Configuration similaire au jeu
+          const container = document.getElementById("container");
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x0a0f1a);
+          scene.fog = new THREE.Fog(0x0a0f1a, 18, 36);
+
+          const camera = new THREE.PerspectiveCamera(60, 800 / 600, 0.1, 200);
+          camera.position.set(0, 2.2, 6.5);
+          camera.lookAt(0, 1, -8);
+
+          const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: false,
+          });
+          renderer.outputColorSpace = THREE.SRGBColorSpace;
+          renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          renderer.setSize(800, 600);
+          container.appendChild(renderer.domElement);
+
+          // Éclairage comme dans le jeu
+          const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.6);
+          scene.add(hemi);
+          const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+          dir.position.set(3, 5, 4);
+          dir.castShadow = true;
+          dir.shadow.mapSize.set(1024, 1024);
+          scene.add(dir);
+
+          // Terrain comme dans le jeu
+          const fieldGeom = new THREE.PlaneGeometry(20, 40);
+          const fieldMat = new THREE.MeshStandardMaterial({
+            color: 0x0b5d3c,
+            roughness: 0.95,
+            metalness: 0.05,
+          });
+          const field = new THREE.Mesh(fieldGeom, fieldMat);
+          field.rotation.x = -Math.PI / 2;
+          field.receiveShadow = true;
+          scene.add(field);
+
+          addDetail("✓ Scène style jeu créée");
+
+          // Balle par défaut d'abord (comme dans le jeu)
+          const ballGeom = new THREE.SphereGeometry(0.22, 32, 32);
+          const ballMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.6,
+            metalness: 0.1,
+          });
+          let ball = new THREE.Mesh(ballGeom, ballMat);
+          ball.position.set(0, 0.22, -0.5);
+          ball.castShadow = true;
+          ball.receiveShadow = true;
+          scene.add(ball);
+          addDetail("✓ Balle par défaut ajoutée");
+
+          updateStatus("Chargement de la balle 3D...", "loading");
+
+          // Chargement de la balle 3D
+          const loader = new THREE.GLTFLoader();
+          loader.load(
+            "game/assets/models/objects/soccer-ball.glb",
+            function (gltf) {
+              updateStatus("Balle 3D chargée avec succès!", "success");
+              addDetail("✓ Modèle soccer-ball.glb lu correctement");
+
+              // Supprimer l'ancienne balle
+              scene.remove(ball);
+
+              // Utiliser la nouvelle balle 3D
+              ball = gltf.scene;
+              ball.scale.setScalar(0.44); // Même taille que l'ancienne
+              ball.position.set(0, 0.22, -0.5);
+              ball.castShadow = true;
+              ball.receiveShadow = true;
+
+              ball.traverse(function (node) {
+                if (node.isMesh) {
+                  node.castShadow = true;
+                  node.receiveShadow = true;
+                  addDetail(`✓ Mesh configuré: ${node.name || "sans nom"}`);
+                }
+              });
+
+              scene.add(ball);
+              addDetail("✓ Balle 3D ajoutée à la scène");
+
+              // Test d'animation de rotation (comme dans le jeu)
+              let rotationSpeed = 0;
+              function animateBall() {
+                if (ball) {
+                  ball.rotation.x += rotationSpeed;
+                  ball.rotation.y += rotationSpeed * 1.2;
+                  rotationSpeed = Math.sin(Date.now() * 0.001) * 0.02;
+                }
+              }
+
+              // Ajouter l'animation à la boucle
+              const originalAnimate = animate;
+              animate = function () {
+                requestAnimationFrame(animate);
+                animateBall();
+                renderer.render(scene, camera);
+              };
+
+              addDetail("✓ Animation de rotation activée");
+            },
+            function (progress) {
+              const percent = Math.round(
+                (progress.loaded / progress.total) * 100
+              );
+              addDetail(`Progression: ${percent}%`);
+            },
+            function (error) {
+              updateStatus("Erreur lors du chargement!", "error");
+              addDetail(`✗ Erreur: ${error.message || error}`);
+              console.error("Détails de l'erreur:", error);
+              addDetail("→ Utilisation de la balle par défaut");
+            }
+          );
+
+          // Boucle d'animation
+          function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+          }
+
+          animate();
+          addDetail("✓ Rendu démarré");
+        } catch (error) {
+          updateStatus(`Erreur: ${error.message}`, "error");
+          addDetail(`✗ ${error.message}`);
+          console.error("Erreur complète:", error);
+        }
+      }, 1000); // Délai pour laisser les scripts se charger
+    </script>
+  </body>
+</html>

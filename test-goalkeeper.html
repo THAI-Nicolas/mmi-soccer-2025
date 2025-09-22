@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Goalkeeper 3D avec Animation</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 800px;
+        height: 600px;
+        border: 2px solid #333;
+        margin: 20px 0;
+      }
+      #info {
+        background: #333;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .status {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .loading {
+        color: #2196f3;
+      }
+      #controls {
+        background: #444;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      button {
+        background: #0149af;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0260d4;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Goalkeeper 3D avec Animation</h1>
+
+    <div id="info">
+      <div class="status loading" id="status">Initialisation...</div>
+      <div id="details"></div>
+    </div>
+
+    <div id="controls">
+      <button id="btn-play-idle">Jouer Animation Idle</button>
+      <button id="btn-stop-anim">Arrêter Animation</button>
+      <button id="btn-reset-pos">Reset Position</button>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Utilisation du CDN Three.js officiel -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      let goalkeeper = null;
+      let mixer = null;
+      let currentAction = null;
+      let clock = new THREE.Clock();
+
+      function updateStatus(message, type = "loading") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+        console.log(message);
+      }
+
+      function addDetail(message) {
+        const div = document.createElement("div");
+        div.textContent = message;
+        detailsEl.appendChild(div);
+        console.log(message);
+      }
+
+      try {
+        updateStatus("Vérification de THREE.js...", "loading");
+
+        addDetail("✓ THREE.js chargé via CDN (version " + THREE.REVISION + ")");
+        addDetail("✓ GLTFLoader importé via ES modules");
+
+        updateStatus("Création de la scène 3D...", "loading");
+
+        // Configuration de base
+        const container = document.getElementById("container");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0f1a);
+
+        const camera = new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000);
+        camera.position.set(0, 2, 8);
+        camera.lookAt(0, 1, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(800, 600);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Éclairage similaire au jeu
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
+        directionalLight.position.set(3, 5, 4);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.set(1024, 1024);
+        scene.add(directionalLight);
+
+        // Sol simple
+        const groundGeometry = new THREE.PlaneGeometry(20, 20);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+          color: 0x0b5d3c,
+          roughness: 0.95,
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        addDetail("✓ Scène 3D créée");
+
+        updateStatus("Chargement du goalkeeper...", "loading");
+
+        // Chargement du goalkeeper
+        const loader = new GLTFLoader();
+        loader.load(
+          "game/assets/models/players/goalkeeper-3d.glb",
+          function (gltf) {
+            updateStatus("Goalkeeper chargé avec succès!", "success");
+            addDetail("✓ Fichier goalkeeper-3d.glb lu correctement");
+
+            goalkeeper = gltf.scene;
+            goalkeeper.position.set(0, 0, 0);
+            goalkeeper.scale.setScalar(1);
+
+            // Configuration des ombres
+            goalkeeper.traverse(function (node) {
+              if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+                addDetail(`✓ Mesh trouvé: ${node.name || "sans nom"}`);
+              }
+            });
+
+            scene.add(goalkeeper);
+            addDetail("✓ Goalkeeper ajouté à la scène");
+
+            // Configuration des animations
+            if (gltf.animations && gltf.animations.length > 0) {
+              mixer = new THREE.AnimationMixer(goalkeeper);
+
+              gltf.animations.forEach((clip, index) => {
+                addDetail(
+                  `✓ Animation trouvée: ${
+                    clip.name
+                  } (durée: ${clip.duration.toFixed(2)}s)`
+                );
+              });
+
+              // Chercher l'animation idle
+              const idleClip = gltf.animations.find(
+                (clip) =>
+                  clip.name.toLowerCase().includes("idle") ||
+                  clip.name.toLowerCase().includes("wait") ||
+                  clip.name.toLowerCase().includes("standing")
+              );
+
+              if (idleClip) {
+                currentAction = mixer.clipAction(idleClip);
+                currentAction.loop = THREE.LoopRepeat;
+                currentAction.play();
+                addDetail("✓ Animation idle démarrée automatiquement");
+              } else if (gltf.animations.length > 0) {
+                // Si pas d'idle spécifique, utiliser la première animation
+                currentAction = mixer.clipAction(gltf.animations[0]);
+                currentAction.loop = THREE.LoopRepeat;
+                currentAction.play();
+                addDetail("✓ Première animation démarrée");
+              }
+            } else {
+              addDetail("⚠ Aucune animation trouvée dans le modèle");
+            }
+
+            // Configuration des boutons
+            setupControls(gltf.animations);
+          },
+          function (progress) {
+            const percent = Math.round(
+              (progress.loaded / progress.total) * 100
+            );
+            addDetail(`Progression: ${percent}%`);
+          },
+          function (error) {
+            updateStatus("Erreur lors du chargement!", "error");
+            addDetail(`✗ Erreur: ${error.message || error}`);
+            console.error("Détails de l'erreur:", error);
+          }
+        );
+
+        function setupControls(animations) {
+          const btnPlayIdle = document.getElementById("btn-play-idle");
+          const btnStopAnim = document.getElementById("btn-stop-anim");
+          const btnResetPos = document.getElementById("btn-reset-pos");
+
+          btnPlayIdle.onclick = () => {
+            if (mixer && animations.length > 0) {
+              if (currentAction) currentAction.stop();
+
+              const idleClip =
+                animations.find(
+                  (clip) =>
+                    clip.name.toLowerCase().includes("idle") ||
+                    clip.name.toLowerCase().includes("wait") ||
+                    clip.name.toLowerCase().includes("standing")
+                ) || animations[0];
+
+              currentAction = mixer.clipAction(idleClip);
+              currentAction.loop = THREE.LoopRepeat;
+              currentAction.reset().play();
+              addDetail("▶ Animation idle relancée");
+            }
+          };
+
+          btnStopAnim.onclick = () => {
+            if (currentAction) {
+              currentAction.stop();
+              addDetail("⏹ Animation arrêtée");
+            }
+          };
+
+          btnResetPos.onclick = () => {
+            if (goalkeeper) {
+              goalkeeper.position.set(0, 0, 0);
+              goalkeeper.rotation.set(0, 0, 0);
+              addDetail("🔄 Position réinitialisée");
+            }
+          };
+        }
+
+        // Animation loop
+        function animate() {
+          requestAnimationFrame(animate);
+
+          const delta = clock.getDelta();
+          if (mixer) mixer.update(delta);
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+        addDetail("✓ Animation loop démarrée");
+      } catch (error) {
+        updateStatus(`Erreur: ${error.message}`, "error");
+        addDetail(`✗ ${error.message}`);
+        console.error("Erreur complète:", error);
+      }
+    </script>
+  </body>
+</html>

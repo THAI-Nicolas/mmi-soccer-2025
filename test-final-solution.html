@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solution Finale - Balle 3D dans le Jeu</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 800px;
+        height: 600px;
+        border: 2px solid #333;
+        margin: 20px 0;
+      }
+      #info {
+        background: #333;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .status {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .loading {
+        color: #2196f3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Solution Finale - Balle 3D Style Jeu</h1>
+
+    <div id="info">
+      <div class="status loading" id="status">Initialisation...</div>
+      <div id="details"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Solution finale avec importmap (comme nos tests qui marchaient) -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      function updateStatus(message, type = "loading") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+        console.log(message);
+      }
+
+      function addDetail(message) {
+        const div = document.createElement("div");
+        div.textContent = message;
+        detailsEl.appendChild(div);
+        console.log(message);
+      }
+
+      // Fonction pour créer une balle par défaut (exactement comme dans le jeu)
+      function createDefaultBall() {
+        const ballGeom = new THREE.SphereGeometry(0.22, 32, 32);
+        const ballMat = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.6,
+          metalness: 0.1,
+        });
+        const ball = new THREE.Mesh(ballGeom, ballMat);
+        ball.position.set(0, 0.22, -0.5);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        return ball;
+      }
+
+      // Fonction pour remplacer la balle par le modèle 3D (logique du jeu)
+      function replaceBallWith3D(scene, currentBall, callback) {
+        const loader = new GLTFLoader();
+        loader.load(
+          "game/assets/models/objects/soccer-ball.glb",
+          function (gltf) {
+            addDetail("✓ Modèle soccer-ball.glb chargé avec succès");
+
+            // Supprimer l'ancienne balle
+            scene.remove(currentBall);
+
+            // Configurer la nouvelle balle 3D
+            const ball3D = gltf.scene;
+            ball3D.scale.setScalar(0.44); // Même taille que l'ancienne
+            ball3D.position.set(0, 0.22, -0.5); // Même position
+            ball3D.castShadow = true;
+            ball3D.receiveShadow = true;
+
+            // Configurer tous les meshes
+            ball3D.traverse(function (node) {
+              if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+                addDetail(`✓ Mesh configuré: ${node.name || "sans nom"}`);
+              }
+            });
+
+            scene.add(ball3D);
+            callback(ball3D);
+          },
+          function (progress) {
+            const percent = Math.round(
+              (progress.loaded / progress.total) * 100
+            );
+            addDetail(`Progression: ${percent}%`);
+          },
+          function (error) {
+            addDetail(`✗ Erreur chargement: ${error.message || error}`);
+            console.error("Erreur:", error);
+            // En cas d'erreur, garder la balle par défaut
+            callback(currentBall);
+          }
+        );
+      }
+
+      try {
+        updateStatus("Vérification des librairies...", "loading");
+
+        addDetail("✓ THREE.js chargé (version " + THREE.REVISION + ")");
+        addDetail("✓ GLTFLoader importé avec succès");
+
+        updateStatus(
+          "Création de la scène (exactement comme le jeu)...",
+          "loading"
+        );
+
+        // Configuration EXACTE du jeu penalty.js
+        const container = document.getElementById("container");
+        const renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: false,
+        });
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(800, 600);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0f1a);
+        scene.fog = new THREE.Fog(0x0a0f1a, 18, 36);
+
+        const camera = new THREE.PerspectiveCamera(60, 800 / 600, 0.1, 200);
+        camera.position.set(0, 2.2, 6.5);
+        camera.lookAt(0, 1, -8);
+
+        // Éclairage EXACT du jeu
+        const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.6);
+        scene.add(hemi);
+        const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+        dir.position.set(3, 5, 4);
+        dir.castShadow = true;
+        dir.shadow.mapSize.set(1024, 1024);
+        scene.add(dir);
+
+        // Terrain EXACT du jeu
+        const fieldGeom = new THREE.PlaneGeometry(20, 40);
+        const fieldMat = new THREE.MeshStandardMaterial({
+          color: 0x0b5d3c,
+          roughness: 0.95,
+          metalness: 0.05,
+        });
+        const field = new THREE.Mesh(fieldGeom, fieldMat);
+        field.rotation.x = -Math.PI / 2;
+        field.receiveShadow = true;
+        scene.add(field);
+
+        addDetail("✓ Scène exactement comme le jeu créée");
+
+        // Créer la balle par défaut (comme dans penalty.js)
+        let ball = createDefaultBall();
+        scene.add(ball);
+        addDetail("✓ Balle par défaut ajoutée (comme penalty.js)");
+
+        updateStatus("Remplacement par la balle 3D...", "loading");
+
+        // Remplacer par le modèle 3D (logique à intégrer dans penalty.js)
+        replaceBallWith3D(scene, ball, function (newBall) {
+          ball = newBall; // Mettre à jour la référence
+          if (newBall.type === "Group") {
+            // C'est le modèle 3D
+            updateStatus("Balle 3D intégrée avec succès!", "success");
+            addDetail("✓ Balle remplacée par le modèle 3D");
+            addDetail("→ Cette logique peut être intégrée dans penalty.js");
+          } else {
+            updateStatus("Balle par défaut conservée", "loading");
+            addDetail("→ Modèle 3D non chargé, balle par défaut utilisée");
+          }
+        });
+
+        // Animation (comme dans le jeu)
+        function animate() {
+          requestAnimationFrame(animate);
+
+          // Petite rotation pour voir que ça fonctionne
+          if (ball) {
+            ball.rotation.x += 0.005;
+            ball.rotation.y += 0.008;
+          }
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+        addDetail("✓ Rendu démarré (prêt pour intégration)");
+      } catch (error) {
+        updateStatus(`Erreur: ${error.message}`, "error");
+        addDetail(`✗ ${error.message}`);
+        console.error("Erreur complète:", error);
+      }
+    </script>
+  </body>
+</html>

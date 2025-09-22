@@ -119,14 +119,606 @@
     roughness: 0.6,
     metalness: 0.1,
   });
-  const ball = new THREE.Mesh(ballGeom, ballMat);
+  let ball = new THREE.Mesh(ballGeom, ballMat);
   const ballRadius = 0.22;
   ball.position.set(0, 0.22, -0.5);
   ball.castShadow = true;
   ball.receiveShadow = true;
   scene.add(ball);
 
-  const player = new THREE.Group();
+  // Fonction pour remplacer la balle par le modèle 3D
+  function replaceBallWith3D() {
+    // Utiliser la référence GLTFLoader qui fonctionne
+    let GLTFLoaderClass;
+    if (typeof THREE.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = THREE.GLTFLoader;
+    } else if (typeof window.THREE?.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = window.THREE.GLTFLoader;
+    } else if (typeof window.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = window.GLTFLoader;
+    } else {
+      console.error("Aucune référence GLTFLoader trouvée");
+      return;
+    }
+
+    console.log("Utilisation de GLTFLoader:", GLTFLoaderClass);
+    const loader = new GLTFLoaderClass();
+    loader.load(
+      "game/assets/models/objects/soccer-ball.glb",
+      function (gltf) {
+        console.log("Modèle soccer-ball.glb chargé avec succès");
+
+        // Supprimer l'ancienne balle
+        scene.remove(ball);
+
+        // Configurer la nouvelle balle 3D
+        ball = gltf.scene;
+        ball.scale.setScalar(0.8); // Même taille que l'ancienne
+        ball.position.set(0, 0.22, -0.5); // Même position
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+
+        // Configurer tous les meshes
+        ball.traverse(function (node) {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+          }
+        });
+
+        scene.add(ball);
+        console.log("Balle 3D intégrée dans le jeu");
+      },
+      function (progress) {
+        console.log(
+          "Chargement balle 3D:",
+          Math.round((progress.loaded / progress.total) * 100) + "%"
+        );
+      },
+      function (error) {
+        console.error("Erreur chargement balle 3D:", error);
+        console.log("Conservation de la balle par défaut");
+      }
+    );
+  }
+
+  // Fonction pour attendre que GLTFLoader soit disponible
+  function waitForGLTFLoader(callback, maxAttempts = 50) {
+    let attempts = 0;
+
+    function checkLoader() {
+      attempts++;
+
+      // Debug détaillé
+      if (attempts <= 3 || attempts % 10 === 0) {
+        // Réduire le spam de logs
+        console.log("=== DEBUG GLTFLoader (tentative " + attempts + ") ===");
+        console.log("window.THREE:", typeof window.THREE);
+        console.log("THREE.GLTFLoader:", typeof THREE.GLTFLoader);
+        console.log(
+          "window.THREE.GLTFLoader:",
+          typeof window.THREE?.GLTFLoader
+        );
+        console.log("window.GLTFLoader:", typeof window.GLTFLoader);
+      }
+
+      // Vérifier plusieurs façons d'accéder à GLTFLoader
+      const hasGLTFLoader =
+        typeof THREE.GLTFLoader !== "undefined" ||
+        typeof window.THREE?.GLTFLoader !== "undefined" ||
+        typeof window.GLTFLoader !== "undefined";
+
+      if (hasGLTFLoader) {
+        console.log("GLTFLoader trouvé, chargement du modèle 3D...");
+        callback();
+      } else if (attempts < maxAttempts) {
+        console.log(
+          "Attente du GLTFLoader... (tentative " +
+            attempts +
+            "/" +
+            maxAttempts +
+            ")"
+        );
+        setTimeout(checkLoader, 100);
+      } else {
+        console.log(
+          "GLTFLoader non disponible après " +
+            maxAttempts +
+            " tentatives, conservation de la balle par défaut"
+        );
+      }
+    }
+
+    checkLoader();
+  }
+
+  // Attendre que GLTFLoader soit disponible puis charger les modèles 3D
+  waitForGLTFLoader(replaceBallWith3D);
+  waitForGLTFLoader(replacePlayerWith3D);
+  waitForGLTFLoader(replaceKeeperWith3D);
+
+  // Variables pour le gardien 3D
+  let keeperMixer = null;
+  let keeperIdleAction = null;
+  let keeperAnimationInProgress = false; // Pour empêcher les tirs pendant les animations
+  let keeperAnimations = {
+    idle: null,
+    low_left_diving: null,
+    low_middle_diving: null,
+    low_right_diving: null,
+    up_left_diving: null,
+    up_middle_diving: null,
+    up_right_diving: null,
+  };
+
+  // Variables pour le joueur 3D
+  let playerMixer = null;
+  let playerIdleAction = null;
+  let playerAnimations = {
+    idle: null,
+    shoot: null,
+    miss: null,
+    victory: null,
+  };
+
+  // Fonction pour remplacer le gardien par le modèle 3D
+  function replaceKeeperWith3D() {
+    // Utiliser la référence GLTFLoader qui fonctionne
+    let GLTFLoaderClass;
+    if (typeof THREE.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = THREE.GLTFLoader;
+    } else if (typeof window.THREE?.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = window.THREE.GLTFLoader;
+    } else if (typeof window.GLTFLoader !== "undefined") {
+      GLTFLoaderClass = window.GLTFLoader;
+    } else {
+      console.error("Aucune référence GLTFLoader trouvée pour le gardien");
+      return;
+    }
+
+    console.log("Chargement du gardien 3D...");
+    const loader = new GLTFLoaderClass();
+    loader.load(
+      "game/assets/models/players/goalkeeper-3d.glb",
+      function (gltf) {
+        console.log("Modèle goalkeeper-3d.glb chargé avec succès");
+
+        // Supprimer les éléments du gardien par défaut
+        scene.remove(keeper);
+        keeper.clear(); // Nettoyer le groupe
+
+        // Configurer le nouveau gardien 3D
+        const keeper3D = gltf.scene;
+        keeper3D.position.set(0, 0, goalZ + 0.02);
+        keeper3D.scale.setScalar(4); // Taille ajustée pour le jeu
+        keeper3D.castShadow = true;
+        keeper3D.receiveShadow = true;
+
+        console.log("Position gardien 3D:", keeper3D.position);
+        console.log("Échelle gardien 3D:", keeper3D.scale);
+        console.log("goalZ:", goalZ);
+
+        // Configurer tous les meshes et améliorer l'éclairage
+        keeper3D.traverse(function (node) {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+
+            // Améliorer l'éclairage des matériaux
+            if (node.material) {
+              // Réduire la rugosité pour plus de brillance
+              if (node.material.roughness !== undefined) {
+                node.material.roughness = Math.max(
+                  0.3,
+                  node.material.roughness * 0.7
+                );
+              }
+
+              // Réduire le métallique pour un aspect plus naturel
+              if (node.material.metalness !== undefined) {
+                node.material.metalness = Math.min(
+                  0.1,
+                  node.material.metalness
+                );
+              }
+
+              // Augmenter l'émission pour éclaircir
+              if (node.material.emissive !== undefined) {
+                node.material.emissive.setHex(0x111111); // Légère émission
+              }
+
+              console.log(
+                "Matériau gardien configuré:",
+                node.name,
+                node.material.type
+              );
+            }
+          }
+        });
+
+        // Ajouter un éclairage spécifique pour le gardien
+        const keeperLight = new THREE.PointLight(0xffffff, 0.8, 10);
+        keeperLight.position.set(0, 3, goalZ + 2);
+        scene.add(keeperLight);
+        console.log("Éclairage spécifique ajouté pour le gardien");
+
+        // Ajouter le gardien 3D directement à la scène
+        keeper = keeper3D;
+        scene.add(keeper);
+
+        console.log("Gardien 3D intégré dans le jeu");
+
+        // Configuration des animations
+        if (gltf.animations && gltf.animations.length > 0) {
+          keeperMixer = new THREE.AnimationMixer(keeper);
+
+          console.log(
+            "Animations du gardien trouvées:",
+            gltf.animations.length
+          );
+
+          // Stocker toutes les animations
+          gltf.animations.forEach((clip, index) => {
+            console.log(
+              `Animation ${index}: ${clip.name} (durée: ${clip.duration.toFixed(
+                2
+              )}s)`
+            );
+
+            const animName = clip.name.toLowerCase();
+            if (animName.includes("idle")) {
+              keeperAnimations.idle = keeperMixer.clipAction(clip);
+            } else if (animName.includes("low_left_diving")) {
+              keeperAnimations.low_left_diving = keeperMixer.clipAction(clip);
+            } else if (animName.includes("low_middle_diving")) {
+              keeperAnimations.low_middle_diving = keeperMixer.clipAction(clip);
+            } else if (animName.includes("low_right_diving")) {
+              keeperAnimations.low_right_diving = keeperMixer.clipAction(clip);
+            } else if (animName.includes("up_left_diving")) {
+              keeperAnimations.up_left_diving = keeperMixer.clipAction(clip);
+            } else if (animName.includes("up_middle_diving")) {
+              keeperAnimations.up_middle_diving = keeperMixer.clipAction(clip);
+            } else if (animName.includes("up_right_diving")) {
+              keeperAnimations.up_right_diving = keeperMixer.clipAction(clip);
+            }
+          });
+
+          // Démarrer l'animation idle
+          if (keeperAnimations.idle) {
+            keeperAnimations.idle.loop = THREE.LoopRepeat;
+            keeperAnimations.idle.play();
+            keeperIdleAction = keeperAnimations.idle;
+            console.log("Animation idle du gardien démarrée");
+          } else if (gltf.animations.length > 0) {
+            // Si pas d'idle spécifique, utiliser la première animation
+            keeperIdleAction = keeperMixer.clipAction(gltf.animations[0]);
+            keeperIdleAction.loop = THREE.LoopRepeat;
+            keeperIdleAction.play();
+            console.log("Première animation du gardien démarrée");
+          }
+        } else {
+          console.log("Aucune animation trouvée pour le gardien");
+        }
+      },
+      function (progress) {
+        console.log(
+          "Chargement gardien 3D:",
+          Math.round((progress.loaded / progress.total) * 100) + "%"
+        );
+      },
+      function (error) {
+        console.error("Erreur chargement gardien 3D:", error);
+        console.log("Conservation du gardien par défaut");
+      }
+    );
+  }
+
+  // Fonction pour jouer une animation de plongée selon la direction
+  function playKeeperDiveAnimation(targetX, targetY) {
+    if (!keeperMixer || !keeperAnimations) return;
+
+    // Arrêter l'animation actuelle
+    if (keeperIdleAction) {
+      keeperIdleAction.stop();
+    }
+
+    // Déterminer quelle animation jouer selon la position de la balle
+    let animationName;
+
+    if (targetY > 2.5) {
+      // Plongée haute
+      if (targetX < -1.5) {
+        animationName = "up_left_diving";
+      } else if (targetX > 1.5) {
+        animationName = "up_right_diving";
+      } else {
+        animationName = "up_middle_diving";
+      }
+    } else {
+      // Plongée basse
+      if (targetX < -1.5) {
+        animationName = "low_left_diving";
+      } else if (targetX > 1.5) {
+        animationName = "low_right_diving";
+      } else {
+        animationName = "low_middle_diving";
+      }
+    }
+
+    const animation = keeperAnimations[animationName];
+    if (animation) {
+      animation.reset();
+      animation.loop = THREE.LoopOnce;
+      animation.play();
+      keeperAnimationInProgress = true; // Marquer qu'une animation est en cours
+      console.log(`Animation de plongée jouée: ${animationName}`);
+
+      // Afficher un message d'attente
+      if (resultEl) {
+        resultEl.textContent = "Gardien en action...";
+      }
+
+      // Revenir à l'idle immédiatement après l'animation de plongée
+      const animationDuration = animation.getClip().duration * 1000;
+
+      setTimeout(() => {
+        if (keeperAnimations.idle) {
+          keeperAnimations.idle.reset();
+          keeperAnimations.idle.loop = THREE.LoopRepeat;
+          keeperAnimations.idle.play();
+          keeperIdleAction = keeperAnimations.idle;
+          console.log("Animation idle redémarrée après plongée");
+        }
+      }, animationDuration);
+
+      // Débloquer les tirs avec un délai supplémentaire
+      setTimeout(() => {
+        keeperAnimationInProgress = false; // Animation terminée
+        console.log("Gardien prêt pour le prochain tir");
+
+        // Effacer le message d'attente
+        if (resultEl) {
+          resultEl.textContent = "—";
+        }
+      }, animationDuration + 2000); // +2 secondes de délai
+    }
+  }
+
+  // Fonction pour remplacer le joueur par le modèle 3D
+  function replacePlayerWith3D() {
+    // Utiliser la référence GLTFLoader qui fonctionne
+    let GLTFLoaderClass;
+    if (THREE.GLTFLoader) {
+      GLTFLoaderClass = THREE.GLTFLoader;
+    } else if (window.THREE && window.THREE.GLTFLoader) {
+      GLTFLoaderClass = window.THREE.GLTFLoader;
+    } else if (window.GLTFLoader) {
+      GLTFLoaderClass = window.GLTFLoader;
+    } else {
+      console.error("GLTFLoader non disponible pour le joueur");
+      return;
+    }
+
+    console.log("Chargement du modèle joueur 3D...");
+    const loader = new GLTFLoaderClass();
+
+    loader.load(
+      "game/assets/models/players/nico-3d.glb",
+      function (gltf) {
+        console.log("Modèle nico-3d.glb chargé avec succès", gltf);
+
+        // Supprimer l'ancien joueur par défaut
+        scene.remove(player);
+
+        // Configurer le nouveau joueur 3D
+        const player3D = gltf.scene;
+        const playerZ = ball.position.z + 2.0;
+        const playerX = -1.0;
+        player3D.position.set(playerX, 0, playerZ);
+        player3D.scale.setScalar(1.4); // Taille réduite pour le jeu
+
+        // Rotation pour qu'il soit dos à la caméra (face aux buts)
+        player3D.rotation.y = Math.PI; // 180 degrés
+
+        player3D.castShadow = true;
+        player3D.receiveShadow = true;
+
+        // Configurer tous les meshes et améliorer l'éclairage
+        player3D.traverse(function (node) {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+
+            // Améliorer l'éclairage des matériaux
+            if (node.material) {
+              // Réduire la rugosité pour plus de brillance
+              if (node.material.roughness !== undefined) {
+                node.material.roughness = Math.max(
+                  0.2,
+                  node.material.roughness * 0.6
+                );
+              }
+
+              // Réduire le métallique pour un aspect plus naturel
+              if (node.material.metalness !== undefined) {
+                node.material.metalness = Math.min(
+                  0.05,
+                  node.material.metalness
+                );
+              }
+
+              // Émission modérée pour un éclairage naturel
+              if (node.material.emissive !== undefined) {
+                node.material.emissive.setHex(0x111111); // Émission légère
+              }
+
+              // Garder les couleurs originales du modèle
+              // (Pas de modification forcée des couleurs)
+
+              console.log(
+                "Matériau joueur configuré:",
+                node.name,
+                node.material.type
+              );
+            }
+          }
+        });
+
+        // Éclairage équilibré pour le joueur
+        const playerLight = new THREE.PointLight(0xffffff, 1.0, 10); // Intensité modérée
+        playerLight.position.set(playerX, 4, playerZ + 1);
+        scene.add(playerLight);
+
+        // Éclairage d'appoint doux devant le joueur
+        const playerFrontLight = new THREE.DirectionalLight(0xffffff, 0.4); // Doux
+        playerFrontLight.position.set(playerX, 3, playerZ - 2);
+        playerFrontLight.target.position.set(playerX, 1, playerZ);
+        scene.add(playerFrontLight);
+        scene.add(playerFrontLight.target);
+
+        console.log("Éclairage spécifique renforcé ajouté pour le joueur");
+
+        // Remplacer la référence globale du joueur
+        scene.remove(player);
+        scene.add(player3D);
+
+        // Mettre à jour la référence globale
+        window.player = player3D; // Pour accès depuis d'autres parties du code
+
+        console.log("Joueur 3D intégré dans le jeu");
+
+        // Configurer les animations
+        if (gltf.animations && gltf.animations.length > 0) {
+          playerMixer = new THREE.AnimationMixer(player3D);
+
+          console.log("Animations du joueur trouvées:", gltf.animations.length);
+
+          // Stocker les animations par nom
+          gltf.animations.forEach((clip, index) => {
+            const action = playerMixer.clipAction(clip);
+            const animName = clip.name.toLowerCase();
+
+            console.log(
+              `Animation ${index}: ${clip.name} (durée: ${clip.duration.toFixed(
+                2
+              )}s)`
+            );
+
+            if (animName.includes("idle")) {
+              playerAnimations.idle = action;
+            } else if (animName.includes("shoot")) {
+              playerAnimations.shoot = action;
+            } else if (animName.includes("miss")) {
+              playerAnimations.miss = action;
+            } else if (animName.includes("victory")) {
+              playerAnimations.victory = action;
+            }
+          });
+
+          // Démarrer l'animation idle par défaut
+          if (playerAnimations.idle) {
+            playerAnimations.idle.loop = THREE.LoopRepeat;
+            playerAnimations.idle.play();
+            playerIdleAction = playerAnimations.idle;
+            console.log("Animation idle du joueur démarrée");
+          }
+        } else {
+          console.log("Aucune animation trouvée dans le modèle joueur");
+        }
+      },
+      function (progress) {
+        console.log(
+          "Chargement joueur 3D:",
+          Math.round((progress.loaded / progress.total) * 100) + "%"
+        );
+      },
+      function (error) {
+        console.error("Erreur chargement joueur 3D:", error);
+      }
+    );
+  }
+
+  // Fonctions pour gérer les animations du joueur
+  function playPlayerShootAnimation() {
+    if (!playerMixer || !playerAnimations.shoot) {
+      return { duration: 0, kickTiming: 0 }; // Fallback si pas d'animation
+    }
+
+    // Arrêter l'animation actuelle
+    if (playerIdleAction) {
+      playerIdleAction.stop();
+    }
+
+    // Jouer l'animation de tir
+    const shootAction = playerAnimations.shoot;
+    shootAction.reset();
+    shootAction.loop = THREE.LoopOnce;
+    shootAction.play();
+
+    const animationDuration = shootAction.getClip().duration * 1000; // en ms
+    // Estimer que le contact avec la balle se fait à 60% de l'animation
+    const kickTiming = animationDuration * 0.6;
+
+    console.log(
+      `Animation de tir jouée - Durée: ${animationDuration}ms, Contact balle: ${kickTiming}ms`
+    );
+
+    // Revenir à l'idle après l'animation
+    setTimeout(() => {
+      if (playerAnimations.idle) {
+        playerAnimations.idle.reset();
+        playerAnimations.idle.loop = THREE.LoopRepeat;
+        playerAnimations.idle.play();
+        playerIdleAction = playerAnimations.idle;
+        console.log("Retour à l'animation idle du joueur");
+      }
+    }, animationDuration);
+
+    return { duration: animationDuration, kickTiming: kickTiming };
+  }
+
+  function playPlayerResultAnimation(result) {
+    if (!playerMixer || !playerAnimations) return;
+
+    // Arrêter l'animation actuelle
+    if (playerIdleAction) {
+      playerIdleAction.stop();
+    }
+
+    let animationToPlay = null;
+    let animationName = "";
+
+    if (result === "BUT" || result === "ARRÊT") {
+      // Échec - jouer l'animation miss
+      animationToPlay = playerAnimations.miss;
+      animationName = "miss";
+    } else if (result === "RATÉ") {
+      // Échec aussi - jouer l'animation miss
+      animationToPlay = playerAnimations.miss;
+      animationName = "miss";
+    }
+
+    // Pour l'instant, on ne joue que miss. Victory sera ajoutée plus tard selon les besoins du jeu
+    if (animationToPlay) {
+      animationToPlay.reset();
+      animationToPlay.loop = THREE.LoopOnce;
+      animationToPlay.play();
+      console.log(`Animation ${animationName} jouée`);
+
+      // Revenir à l'idle après l'animation
+      setTimeout(() => {
+        if (playerAnimations.idle) {
+          playerAnimations.idle.reset();
+          playerAnimations.idle.loop = THREE.LoopRepeat;
+          playerAnimations.idle.play();
+          playerIdleAction = playerAnimations.idle;
+          console.log("Retour à l'animation idle après résultat");
+        }
+      }, animationToPlay.getClip().duration * 1000);
+    }
+  }
+
+  let player = new THREE.Group();
   scene.add(player);
   const torso = new THREE.Mesh(
     new THREE.BoxGeometry(0.7, 1.0, 0.3),
@@ -181,7 +773,7 @@
   headMesh.renderOrder = 2;
   player.add(headMesh);
 
-  const keeper = new THREE.Group();
+  let keeper = new THREE.Group();
   scene.add(keeper);
   const keeperBody = new THREE.Mesh(
     new THREE.BoxGeometry(1.2, 3.6, 0.6),
@@ -200,6 +792,9 @@
   gloveL.position.set(-0.7, 2.4, goalZ + 0.02);
   gloveR.position.set(0.7, 2.4, goalZ + 0.02);
   keeper.add(gloveL, gloveR);
+
+  // Charger le gardien 3D après la création du gardien par défaut
+  waitForGLTFLoader(replaceKeeperWith3D);
 
   let keeperPlan = {
     active: false,
@@ -321,7 +916,7 @@
     stats: { vitesse: 83, tir: 79, passe: 91 },
     svg: null,
   };
-  let vBallBase = 12;
+  let vBallBase = 8; // Vitesse réduite pour équilibrer le jeu
   let dispersionBase = 0.18;
 
   const TOTAL_SHOTS = 5;
@@ -529,7 +1124,7 @@
   function applyStats() {
     const t = norm01(selectedPlayer.stats?.tir ?? 80, 40, 100);
     const p = norm01(selectedPlayer.stats?.passe ?? 80, 40, 100);
-    vBallBase = THREE.MathUtils.lerp(10, 18, t);
+    vBallBase = THREE.MathUtils.lerp(6, 12, t); // Plage réduite pour équilibrer
     dispersionBase = THREE.MathUtils.lerp(0.45, 0.06, p);
   }
   function svgToDataUrl(svg) {
@@ -592,7 +1187,7 @@
   function buildTrajectoryPreview(start, target, speedFactor = 1) {
     const pts = [];
     const dist = start.distanceTo(target);
-    const duration = Math.max(0.35, dist / (vBallBase * speedFactor));
+    const duration = Math.max(0.5, dist / (vBallBase * speedFactor)); // Cohérent avec le vrai tir
     const arc = clamp(dist * 0.12, 0.35, 1.2);
     for (let i = 0; i <= 16; i++) {
       const k = i / 16;
@@ -662,12 +1257,32 @@
   }
 
   function shootTo(target, powerFactor = 1) {
-    if (isShooting || sessionOver) return;
+    if (isShooting || sessionOver || keeperAnimationInProgress) {
+      if (keeperAnimationInProgress) {
+        console.log("Tir bloqué - Gardien en animation, veuillez patienter...");
+      }
+      return;
+    }
     isShooting = true;
     aimRing.visible = false;
     trajectory.visible = false;
     if (resultEl) resultEl.textContent = "…";
 
+    // Jouer l'animation de tir du joueur et récupérer le timing
+    const animationInfo = playPlayerShootAnimation();
+
+    // Délai le démarrage de la balle jusqu'au moment du contact
+    const kickDelay = animationInfo.kickTiming;
+    console.log(`Balle programmée pour démarrer dans ${kickDelay}ms`);
+
+    // Programmer le départ de la balle avec le bon timing
+    setTimeout(() => {
+      actuallyShootBall(target, powerFactor);
+    }, kickDelay);
+  }
+
+  // Fonction séparée pour le vrai départ de la balle
+  function actuallyShootBall(target, powerFactor) {
     const pow01 = clamp((powerFactor - 0.7) / 0.6, 0, 1);
     const maxDisp = THREE.MathUtils.lerp(
       dispersionBase * 1.2,
@@ -683,13 +1298,16 @@
     const start = ball.position.clone();
     const dist = start.distanceTo(targetJ);
     const speed = vBallBase * powerFactor;
-    const duration = Math.max(0.35, dist / speed);
+    const duration = Math.max(0.5, dist / speed); // Durée minimum augmentée
     const arcHeight = clamp(dist * 0.12, 0.35, 1.2);
     const t0 = performance.now();
 
     keeperPlan.startX = 0;
     keeperPlan.startY = 1.0;
     planKeeperDive(targetJ.x, targetJ.y);
+
+    // Jouer l'animation de plongée correspondante
+    playKeeperDiveAnimation(targetJ.x, targetJ.y);
 
     const camShot = new THREE.Vector3(0, 2.35, 6.2);
 
@@ -723,32 +1341,80 @@
             keeperPlan.endY,
             ep
           );
-          keeper.position.set(x, 0, 0);
-          keeperBody.position.set(x, y - 0.1, goalZ + 0.02);
-          gloveL.position.set(x - 0.35, y + 0.2, goalZ + 0.02);
-          gloveR.position.set(x + 0.35, y + 0.2, goalZ + 0.02);
+          keeper.position.set(x, 0, goalZ + 0.02);
+
+          // S'assurer que l'échelle reste constante pour le gardien 3D
+          if (keeper.type === "Group" && !keeperBody) {
+            // C'est le gardien 3D, maintenir l'échelle
+            keeper.scale.setScalar(4); // Maintenir la taille
+          }
+
+          // Pour le gardien par défaut seulement
+          if (keeperBody) {
+            keeperBody.position.set(x, y - 0.1, goalZ + 0.02);
+          }
+          if (gloveL && gloveR) {
+            gloveL.position.set(x - 0.35, y + 0.2, goalZ + 0.02);
+            gloveR.position.set(x + 0.35, y + 0.2, goalZ + 0.02);
+          }
         } else {
-          keeper.position.set(0, 0, 0);
-          keeperBody.position.set(0, 0.9, goalZ + 0.02);
-          gloveL.position.set(-0.35, 1.2, goalZ + 0.02);
-          gloveR.position.set(0.35, 1.2, goalZ + 0.02);
+          keeper.position.set(0, 0, goalZ + 0.02);
+
+          // S'assurer que l'échelle reste constante pour le gardien 3D
+          if (keeper.type === "Group" && !keeperBody) {
+            // C'est le gardien 3D, maintenir l'échelle
+            keeper.scale.setScalar(4); // Maintenir la taille
+          }
+
+          // Pour le gardien par défaut
+          if (keeperBody) {
+            keeperBody.position.set(0, 0.9, goalZ + 0.02);
+          }
+          if (gloveL && gloveR) {
+            gloveL.position.set(-0.35, 1.2, goalZ + 0.02);
+            gloveR.position.set(0.35, 1.2, goalZ + 0.02);
+          }
         }
       }
 
       if (k < 1) {
         requestAnimationFrame(step);
       } else {
-        const saveRadius = 0.3;
-        const gL = new THREE.Vector3(
-          gloveL.position.x,
-          gloveL.position.y,
-          goalZ + 0.02
-        );
-        const gR = new THREE.Vector3(
-          gloveR.position.x,
-          gloveR.position.y,
-          goalZ + 0.02
-        );
+        let saved = false;
+        let saveRadius, gL, gR;
+
+        if (gloveL && gloveR) {
+          // Gardien par défaut avec gants
+          saveRadius = 0.3;
+          gL = new THREE.Vector3(
+            gloveL.position.x,
+            gloveL.position.y,
+            goalZ + 0.02
+          );
+          gR = new THREE.Vector3(
+            gloveR.position.x,
+            gloveR.position.y,
+            goalZ + 0.02
+          );
+        } else {
+          // Gardien 3D - approche simplifiée avec zone énorme
+          const keeperPos = keeper.position;
+
+          // Zone de détection MASSIVE pour garantir des arrêts
+          saveRadius = 3.0; // Zone énorme !
+
+          // Position centrale du gardien comme point de référence unique
+          gL = gR = new THREE.Vector3(
+            keeperPos.x,
+            keeperPos.y + 1.5, // Un peu au-dessus du sol
+            goalZ + 0.02
+          );
+
+          console.log("=== DEBUG ARRÊT GARDIEN 3D ===");
+          console.log("Position gardien:", keeperPos);
+          console.log("Zone de détection centrée:", gL);
+          console.log("Rayon d'arrêt ÉNORME:", saveRadius);
+        }
         const ballAtLine = new THREE.Vector3(
           ball.position.x,
           ball.position.y,
@@ -804,13 +1470,25 @@
           result = "RATÉ";
         }
 
-        let saved = false;
         if (result === "BUT") {
-          const d = Math.min(
-            gL.distanceTo(ballAtLine),
-            gR.distanceTo(ballAtLine)
-          );
-          saved = d < saveRadius;
+          if (gloveL && gloveR) {
+            // Logique originale pour le gardien par défaut
+            const dL = gL.distanceTo(ballAtLine);
+            const dR = gR.distanceTo(ballAtLine);
+            const d = Math.min(dL, dR);
+            saved = d < saveRadius;
+          } else {
+            // Logique simplifiée pour le gardien 3D
+            const distanceToKeeper = gL.distanceTo(ballAtLine);
+            saved = distanceToKeeper < saveRadius;
+
+            console.log("=== CALCUL ARRÊT GARDIEN 3D ===");
+            console.log("Position balle à la ligne:", ballAtLine);
+            console.log("Distance au gardien:", distanceToKeeper.toFixed(2));
+            console.log("Rayon d'arrêt:", saveRadius);
+            console.log("Arrêt détecté?", saved);
+          }
+
           if (saved) result = "ARRÊT";
         }
 
@@ -832,6 +1510,9 @@
         }
         sessionShots += 1;
         updateHUD();
+
+        // Jouer l'animation de résultat du joueur
+        playPlayerResultAnimation(result);
         if (resultEl) {
           if (result === "POTEAU") {
             resultEl.textContent = "RATÉ !";
@@ -854,10 +1535,31 @@
             endX: 0,
             endY: 1.0,
           };
-          keeper.position.set(0, 0, 0);
-          keeperBody.position.set(0, 0.9, goalZ + 0.02);
-          gloveL.position.set(-0.35, 1.2, goalZ + 0.02);
-          gloveR.position.set(0.35, 1.2, goalZ + 0.02);
+          keeper.position.set(0, 0, goalZ + 0.02);
+
+          // S'assurer que l'échelle reste constante pour le gardien 3D
+          if (keeper.type === "Group" && !keeperBody) {
+            // C'est le gardien 3D, maintenir l'échelle
+            keeper.scale.setScalar(4); // Maintenir la taille
+
+            // Redémarrer l'animation idle immédiatement après le reset
+            if (keeperAnimations.idle && !keeperAnimationInProgress) {
+              keeperAnimations.idle.reset();
+              keeperAnimations.idle.loop = THREE.LoopRepeat;
+              keeperAnimations.idle.play();
+              keeperIdleAction = keeperAnimations.idle;
+              console.log("Animation idle redémarrée après reset de position");
+            }
+          }
+
+          // Pour le gardien par défaut
+          if (keeperBody) {
+            keeperBody.position.set(0, 0.9, goalZ + 0.02);
+          }
+          if (gloveL && gloveR) {
+            gloveL.position.set(-0.35, 1.2, goalZ + 0.02);
+            gloveR.position.set(0.35, 1.2, goalZ + 0.02);
+          }
           camera.position.copy(camBase);
           camera.lookAt(0, 1, goalZ);
           if (sessionShots >= TOTAL_SHOTS) endSession();
@@ -865,10 +1567,10 @@
       }
     }
     requestAnimationFrame(step);
-  }
+  } // Fin de actuallyShootBall
 
   function onPointerMove(e) {
-    if (isShooting || sessionOver) return;
+    if (isShooting || sessionOver || keeperAnimationInProgress) return;
     const p = getPointerTarget(e.clientX, e.clientY);
     if (!p) {
       aimRing.visible = false;
@@ -947,7 +1649,14 @@
   }
 
   function onPointerDown(e) {
-    if (sessionOver || isShooting) return;
+    if (sessionOver || isShooting || keeperAnimationInProgress) {
+      if (keeperAnimationInProgress) {
+        console.log(
+          "Charge bloquée - Gardien en animation, veuillez patienter..."
+        );
+      }
+      return;
+    }
     isCharging = true;
     chargeStart = performance.now();
     playVoice();
@@ -1104,6 +1813,15 @@
         scene.remove(p);
         particles.splice(i, 1);
       }
+    }
+
+    // Mettre à jour les animations 3D
+    const delta = 1 / 60; // 60 FPS approximatif
+    if (keeperMixer) {
+      keeperMixer.update(delta);
+    }
+    if (playerMixer) {
+      playerMixer.update(delta);
     }
 
     renderer.render(scene, camera);

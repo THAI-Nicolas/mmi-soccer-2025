@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Three.js Local</title>
+  </head>
+  <body>
+    <h1>Test Three.js Local</h1>
+    <div id="results"></div>
+
+    <script src="game/lib/three.js"></script>
+    <script src="game/lib/GLTFLoader.js"></script>
+    <script>
+      const results = document.getElementById("results");
+
+      function log(message) {
+        console.log(message);
+        results.innerHTML += "<p>" + message + "</p>";
+      }
+
+      log("=== TEST THREEJS LOCAL ===");
+
+      if (window.THREE) {
+        log("✅ THREE.js chargé - Version: " + THREE.REVISION);
+
+        // Test de création d'une scène
+        try {
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+          const renderer = new THREE.WebGLRenderer();
+          log("✅ Scène Three.js créée avec succès");
+
+          // Test GLTFLoader
+          if (THREE.GLTFLoader) {
+            log("✅ GLTFLoader disponible");
+            const loader = new THREE.GLTFLoader();
+            log("✅ GLTFLoader instantié");
+          } else {
+            log("❌ GLTFLoader non disponible");
+          }
+        } catch (e) {
+          log("❌ Erreur création scène: " + e.message);
+        }
+      } else {
+        log("❌ THREE.js non chargé");
+      }
+    </script>
+  </body>
+</html>
