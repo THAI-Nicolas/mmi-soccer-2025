@@ -2285,14 +2285,23 @@ img,
   animation: iconBounce 2s ease-in-out infinite;
 }
 
-.confirmation-title {
+.confirmation-header h2,
+.confirmation-header h3 {
   font-family: "Orbitron", monospace;
-  font-size: 2rem;
-  font-weight: 900;
   color: var(--primary-cyan);
   text-shadow: 0 0 25px rgba(1, 73, 175, 0.8);
   margin: 0;
   letter-spacing: 0.1em;
+}
+
+.confirmation-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.confirmation-header h3 {
+  font-size: 3rem;
+  font-weight: 900;
 }
 
 .confirmation-body {

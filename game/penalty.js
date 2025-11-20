@@ -12,9 +12,9 @@
   scene.fog = new THREE.Fog(0x0a0f1a, 18, 36);
 
   const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
-  const camBase = new THREE.Vector3(0, 2.2, 6.5);
+  const camBase = new THREE.Vector3(0, 2.5, 8); // Caméra plus haute et plus en arrière
   camera.position.copy(camBase);
-  camera.lookAt(0, 1, -8);
+  camera.lookAt(0, 1, -12); // Regarder vers la cage (goalZ sera défini plus tard)
 
   const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.6);
   scene.add(hemi);
@@ -35,9 +35,40 @@
   field.receiveShadow = true;
   scene.add(field);
 
-  const goalZ = -8;
-  const goalWidth = 11.7;
-  const goalHeight = 5.2;
+  // ====== COORDONNÉES POUR LE PROCHAIN SOL 3D ======
+  /*
+  COORDONNÉES PARFAITES TESTÉES POUR UN SOL 3D :
+  
+  Position optimale : (0, -5.0, 0)
+  - X: 0 (centré)
+  - Y: -5.0 (bien au sol, pas trop haut)
+  - Z: 0 (centré sur l'axe avant/arrière)
+  
+  Échelle optimale : 100.0 (gigantesque pour couvrir tout)
+  
+  Rotation optimale : 
+  - X: 0 (terrain à plat)
+  - Y: 0 (pas de rotation)
+  - Z: 0 (pas de rotation)
+  
+  Éclairage pour révéler les couleurs :
+  - DirectionalLight: intensité 3.0, position (0, 20, 10), target (0, -5.0, 0)
+  - AmbientLight: couleur 0x90ee90, intensité 1.5
+  - HemisphereLight: ciel 0x87ceeb, sol 0x228b22, intensité 1.0
+  
+  Forçage des matériaux si nécessaire :
+  - Couleur: 0x4caf50 (vert herbe éclatant)
+  - Émission: 0x2e7d32 (légère émission verte)
+  - Roughness: 0.7, Metalness: 0.0
+  */
+
+  const goalZ = -12; // Distance réaliste pour un penalty (était -8)
+  const goalWidth = 14; // Plus large pour un meilleur gameplay (était 11.7)
+  const goalHeight = 5.8; // Hauteur équilibrée pour un bon gameplay (était 5.2)
+
+  // Dimensions effectives de la cage 3D (avec l'échelle appliquée)
+  const effective3DGoalWidth = goalWidth * 0.9; // Largeur réduite par l'échelle 0.9
+  const effective3DGoalHeight = goalHeight * 1.1; // Hauteur augmentée par l'échelle 1.1
   const postR = 0.06;
   const postMat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
@@ -62,55 +93,31 @@
   crossbar.receiveShadow = true;
   scene.add(leftPost, rightPost, crossbar);
 
-  // filet arrière de but (grille)
-  (function addGoalNet() {
-    const width = goalWidth - 0.2;
-    const height = goalHeight - 0.2;
-    const cell = 0.18;
-    const positions = [];
-    for (let x = -width / 2; x <= width / 2 + 1e-6; x += cell) {
-      positions.push(x, -height / 2, 0, x, height / 2, 0);
-    }
-    for (let y = -height / 2; y <= height / 2 + 1e-6; y += cell) {
-      positions.push(-width / 2, y, 0, width / 2, y, 0);
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(new Float32Array(positions), 3)
-    );
-    const mat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.35,
-    });
-    const grid = new THREE.LineSegments(geo, mat);
-    grid.position.set(0, goalHeight / 2, goalZ - 1.2);
-    scene.add(grid);
-  })();
+  // Filet supprimé - remplacé par la cage 3D avec son propre filet
 
-  // cadre d’aide (zone tirable)
+  // Zone de visée autorisée (basée sur les dimensions effectives de la cage 3D)
+  const aimingLimits = {
+    minY: 0.2, // Juste au-dessus du sol
+    maxY: effective3DGoalHeight + 1.8, // Raisonnable au-dessus de la barre 3D
+    minX: -(effective3DGoalWidth / 2) - 2.5, // Largeur généreuse basée sur la cage 3D
+    maxX: effective3DGoalWidth / 2 + 2.5, // Largeur généreuse basée sur la cage 3D
+  };
+
+  // Cadre invisible - les limites sont actives mais non visibles
   const frameGeo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(-goalWidth / 2 + postR * 2, 0.25, goalZ + 0.001),
-    new THREE.Vector3(goalWidth / 2 - postR * 2, 0.25, goalZ + 0.001),
-    new THREE.Vector3(
-      goalWidth / 2 - postR * 2,
-      goalHeight - 0.15,
-      goalZ + 0.001
-    ),
-    new THREE.Vector3(
-      -goalWidth / 2 + postR * 2,
-      goalHeight - 0.15,
-      goalZ + 0.001
-    ),
-    new THREE.Vector3(-goalWidth / 2 + postR * 2, 0.25, goalZ + 0.001),
+    new THREE.Vector3(aimingLimits.minX, aimingLimits.minY, goalZ + 0.001),
+    new THREE.Vector3(aimingLimits.maxX, aimingLimits.minY, goalZ + 0.001),
+    new THREE.Vector3(aimingLimits.maxX, aimingLimits.maxY, goalZ + 0.001),
+    new THREE.Vector3(aimingLimits.minX, aimingLimits.maxY, goalZ + 0.001),
+    new THREE.Vector3(aimingLimits.minX, aimingLimits.minY, goalZ + 0.001),
   ]);
   const frameMat = new THREE.LineBasicMaterial({
-    color: 0x1fb6ff,
+    color: 0x22ff88,
     transparent: true,
-    opacity: 0.15,
+    opacity: 0.0, // Complètement invisible
   });
   const frame = new THREE.Line(frameGeo, frameMat);
+  frame.visible = false; // Double sécurité - complètement masqué
   scene.add(frame);
 
   const ballGeom = new THREE.SphereGeometry(0.22, 32, 32);
@@ -236,6 +243,8 @@
   waitForGLTFLoader(replaceBallWith3D);
   waitForGLTFLoader(replacePlayerWith3D);
   waitForGLTFLoader(replaceKeeperWith3D);
+  waitForGLTFLoader(replaceGoalWith3D);
+  // waitForGLTFLoader(replaceFieldWith3D); // DÉSACTIVÉ - Sol 3D pas satisfaisant
 
   // Variables pour le gardien 3D
   let keeperMixer = null;
@@ -338,7 +347,7 @@
 
         // Ajouter un éclairage spécifique pour le gardien
         const keeperLight = new THREE.PointLight(0xffffff, 0.8, 10);
-        keeperLight.position.set(0, 3, goalZ + 2);
+        keeperLight.position.set(0, 5, goalZ + 3); // Ajusté pour la nouvelle taille de cage
         scene.add(keeperLight);
         console.log("Éclairage spécifique ajouté pour le gardien");
 
@@ -512,7 +521,7 @@
 
         // Configurer le nouveau joueur 3D
         const player3D = gltf.scene;
-        const playerZ = ball.position.z + 2.0;
+        const playerZ = ball.position.z + 4.0; // Plus loin de la balle pour une meilleure position
         const playerX = -1.0;
         player3D.position.set(playerX, 0, playerZ);
         player3D.scale.setScalar(1.4); // Taille réduite pour le jeu
@@ -576,7 +585,21 @@
         scene.add(playerFrontLight);
         scene.add(playerFrontLight.target);
 
-        console.log("Éclairage spécifique renforcé ajouté pour le joueur");
+        // ÉCLAIRAGE ARRIÈRE pour éviter le dos tout noir
+        const playerBackLight = new THREE.DirectionalLight(0xffffff, 0.8); // Plus intense pour le dos
+        playerBackLight.position.set(playerX, 5, playerZ + 3); // Derrière et au-dessus de Nico
+        playerBackLight.target.position.set(playerX, 1, playerZ);
+        scene.add(playerBackLight);
+        scene.add(playerBackLight.target);
+
+        // Lumière latérale pour un éclairage uniforme
+        const playerSideLight = new THREE.PointLight(0xffffff, 0.6, 8); // Lumière omnidirectionnelle
+        playerSideLight.position.set(playerX + 2, 3, playerZ); // À côté de Nico
+        scene.add(playerSideLight);
+
+        console.log(
+          "Éclairage 360° ajouté pour le joueur (devant, derrière, côté)"
+        );
 
         // Remplacer la référence globale du joueur
         scene.remove(player);
@@ -638,6 +661,275 @@
     );
   }
 
+  // ====== FONCTION POUR REMPLACER LA CAGE PAR UN MODÈLE 3D ======
+  function replaceGoalWith3D() {
+    // Utiliser la référence GLTFLoader qui fonctionne
+    let GLTFLoaderClass;
+    if (THREE.GLTFLoader) {
+      GLTFLoaderClass = THREE.GLTFLoader;
+    } else if (window.THREE && window.THREE.GLTFLoader) {
+      GLTFLoaderClass = window.THREE.GLTFLoader;
+    } else if (window.GLTFLoader) {
+      GLTFLoaderClass = window.GLTFLoader;
+    } else {
+      console.error("GLTFLoader non disponible pour la cage");
+      return;
+    }
+
+    console.log("Chargement du modèle cage 3D...");
+    const loader = new GLTFLoaderClass();
+
+    loader.load(
+      "game/assets/models/objects/football-goal-3d.glb",
+      function (gltf) {
+        console.log("Modèle football-goal-3d.glb chargé avec succès", gltf);
+
+        // Supprimer directement les éléments de cage basiques connus
+        console.log("Suppression des éléments de cage basiques...");
+
+        // Supprimer les poteaux et barre transversale par leurs références directes
+        if (typeof leftPost !== "undefined") {
+          scene.remove(leftPost);
+          console.log("Poteau gauche supprimé");
+        }
+        if (typeof rightPost !== "undefined") {
+          scene.remove(rightPost);
+          console.log("Poteau droit supprimé");
+        }
+        if (typeof crossbar !== "undefined") {
+          scene.remove(crossbar);
+          console.log("Barre transversale supprimée");
+        }
+
+        // Méthode de secours : supprimer par géométrie
+        const elementsToRemove = [];
+        scene.traverse(function (object) {
+          if (object.isMesh && object.geometry && object.material) {
+            // Vérifier si c'est un cylindre (poteaux) avec les bonnes dimensions
+            if (object.geometry.type === "CylinderGeometry") {
+              const params = object.geometry.parameters;
+              if (
+                params &&
+                ((params.radiusTop === postR && params.height === goalHeight) || // Poteau vertical
+                  (params.radiusTop === postR && params.height === goalWidth))
+              ) {
+                // Barre horizontale
+                elementsToRemove.push(object);
+              }
+            }
+          }
+        });
+
+        console.log(
+          `Suppression de ${elementsToRemove.length} éléments supplémentaires`
+        );
+        elementsToRemove.forEach((element) => scene.remove(element));
+
+        // Configurer la nouvelle cage 3D
+        const goal3D = gltf.scene;
+
+        // Position ajustée pour centrer parfaitement avec le gardien
+        goal3D.position.set(0, 0, goalZ); // Même position Z que le gardien
+        goal3D.scale.set(0.9, 1.1, 0.9); // Largeur/profondeur réduite, hauteur augmentée
+
+        // Rotation de la cage dans le bon sens
+        goal3D.rotation.y = -Math.PI / 2; // -90° (ou 270°) pour inverser le sens
+
+        // Ajustement fin pour centrer parfaitement avec le gardien
+        goal3D.position.x = -4.0; // Décaler un tout petit peu plus à gauche pour centrage parfait
+        goal3D.position.y = 0; // Au niveau du sol
+
+        console.log("Position finale cage 3D:", goal3D.position);
+        console.log(
+          "Position gardien:",
+          keeper ? keeper.position : "Gardien non chargé"
+        );
+
+        goal3D.castShadow = true;
+        goal3D.receiveShadow = true;
+
+        // Configurer tous les meshes de la cage
+        goal3D.traverse(function (node) {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+
+            // Améliorer les matériaux pour un rendu optimal
+            if (node.material) {
+              // Ajuster pour un aspect métallique réaliste (poteaux)
+              if (node.material.roughness !== undefined) {
+                node.material.roughness = 0.3; // Métal légèrement rugueux
+              }
+              if (node.material.metalness !== undefined) {
+                node.material.metalness = 0.8; // Très métallique pour les poteaux
+              }
+
+              console.log(
+                "Matériau cage configuré:",
+                node.name,
+                node.material.type
+              );
+            }
+          }
+        });
+
+        // Ajouter la cage 3D à la scène
+        scene.add(goal3D);
+
+        console.log("Cage 3D intégrée dans le jeu avec succès !");
+        console.log("Position:", goal3D.position);
+        console.log("Échelle:", goal3D.scale);
+      },
+      function (progress) {
+        console.log(
+          "Chargement cage 3D:",
+          Math.round((progress.loaded / progress.total) * 100) + "%"
+        );
+      },
+      function (error) {
+        console.error("Erreur chargement cage 3D:", error);
+        console.log("Conservation de la cage basique par défaut");
+      }
+    );
+  }
+
+  // ====== FONCTION POUR REMPLACER LE TERRAIN PAR UN MODÈLE 3D ======
+  function replaceFieldWith3D() {
+    // Utiliser la référence GLTFLoader qui fonctionne
+    let GLTFLoaderClass;
+    if (THREE.GLTFLoader) {
+      GLTFLoaderClass = THREE.GLTFLoader;
+    } else if (window.THREE && window.THREE.GLTFLoader) {
+      GLTFLoaderClass = window.THREE.GLTFLoader;
+    } else if (window.GLTFLoader) {
+      GLTFLoaderClass = window.GLTFLoader;
+    } else {
+      console.error("GLTFLoader non disponible pour le terrain");
+      return;
+    }
+
+    console.log("Chargement du modèle terrain 3D...");
+    const loader = new GLTFLoaderClass();
+
+    loader.load(
+      "game/assets/models/objects/grass.glb",
+      function (gltf) {
+        console.log("Modèle grass.glb chargé avec succès", gltf);
+
+        // Supprimer l'ancien terrain basique
+        scene.remove(field);
+        console.log("Ancien terrain basique supprimé");
+
+        // Configurer le nouveau terrain 3D
+        const field3D = gltf.scene;
+        field3D.position.set(0, -5.0, 0); // ÉNORMÉMENT plus bas pour être vraiment au sol
+        field3D.scale.setScalar(100.0); // GIGANTESQUE pour couvrir tout l'horizon !
+
+        // Rotation pour que le terrain soit complètement à plat
+        field3D.rotation.x = 0; // Pas de rotation sur X pour qu'il soit à plat
+        field3D.rotation.y = 0; // Pas de rotation sur Y
+        field3D.rotation.z = 0; // Pas de rotation sur Z
+
+        field3D.castShadow = false; // Le terrain ne projette pas d'ombre
+        field3D.receiveShadow = true; // Mais il reçoit les ombres
+
+        // Configurer tous les meshes du terrain
+        field3D.traverse(function (node) {
+          if (node.isMesh) {
+            node.castShadow = false; // Le terrain ne projette pas d'ombre
+            node.receiveShadow = true; // Mais il reçoit les ombres
+
+            // Forcer les matériaux à être verts et bien éclairés
+            if (node.material) {
+              // FORCER la couleur verte du terrain
+              node.material.color = new THREE.Color(0x4caf50); // Vert herbe éclatant
+
+              // Ajuster pour un aspect herbe réaliste
+              if (node.material.roughness !== undefined) {
+                node.material.roughness = 0.7; // Herbe moins rugueuse pour plus de luminosité
+              }
+              if (node.material.metalness !== undefined) {
+                node.material.metalness = 0.0; // Pas métallique du tout
+              }
+
+              // Ajouter de l'émission pour s'assurer qu'il soit visible
+              if (node.material.emissive !== undefined) {
+                node.material.emissive = new THREE.Color(0x2e7d32); // Légère émission verte
+              }
+
+              // S'assurer que le matériau reçoit la lumière
+              node.material.needsUpdate = true;
+
+              console.log(
+                "Matériau terrain FORCÉ au vert:",
+                node.name,
+                node.material.type,
+                "Couleur:",
+                node.material.color.getHexString()
+              );
+            }
+          }
+        });
+
+        // Éclairage MASSIF pour révéler les vraies couleurs du terrain
+        const fieldMainLight = new THREE.DirectionalLight(0xffffff, 3.0); // Lumière encore plus intense
+        fieldMainLight.position.set(0, 20, 10); // Haute et légèrement devant
+        fieldMainLight.target.position.set(0, -5.0, 0); // Pointe exactement sur le terrain à sa nouvelle position
+        scene.add(fieldMainLight);
+        scene.add(fieldMainLight.target);
+
+        // Lumière ambiante verte naturelle très forte
+        const fieldAmbientLight = new THREE.AmbientLight(0x90ee90, 1.5); // Vert clair naturel très fort
+        scene.add(fieldAmbientLight);
+
+        // Lumière supplémentaire pour les couleurs
+        const fieldColorLight = new THREE.HemisphereLight(
+          0x87ceeb,
+          0x228b22,
+          1.0
+        ); // Ciel bleu vers vert
+        scene.add(fieldColorLight);
+
+        console.log("Éclairage spécifique du terrain ajouté");
+
+        // Ajouter le terrain 3D à la scène
+        scene.add(field3D);
+
+        console.log("Terrain 3D intégré dans le jeu avec succès !");
+        console.log("Position:", field3D.position);
+        console.log("Échelle:", field3D.scale);
+      },
+      function (progress) {
+        console.log(
+          "Chargement terrain 3D:",
+          Math.round((progress.loaded / progress.total) * 100) + "%"
+        );
+      },
+      function (error) {
+        console.error("Erreur chargement terrain 3D:", error);
+        console.log("Création d'un terrain de secours...");
+
+        // Créer un terrain de secours plus grand
+        const fallbackFieldGeom = new THREE.PlaneGeometry(40, 60); // Plus grand que l'original
+        const fallbackFieldMat = new THREE.MeshStandardMaterial({
+          color: 0x0b5d3c,
+          roughness: 0.95,
+          metalness: 0.05,
+        });
+        const fallbackField = new THREE.Mesh(
+          fallbackFieldGeom,
+          fallbackFieldMat
+        );
+        fallbackField.rotation.x = -Math.PI / 2;
+        fallbackField.receiveShadow = true;
+        fallbackField.position.set(0, -0.01, 0);
+        scene.add(fallbackField);
+
+        console.log("Terrain de secours créé");
+      }
+    );
+  }
+
   // Fonctions pour gérer les animations du joueur
   function playPlayerShootAnimation() {
     if (!playerMixer || !playerAnimations.shoot) {
@@ -678,44 +970,10 @@
   }
 
   function playPlayerResultAnimation(result) {
-    if (!playerMixer || !playerAnimations) return;
-
-    // Arrêter l'animation actuelle
-    if (playerIdleAction) {
-      playerIdleAction.stop();
-    }
-
-    let animationToPlay = null;
-    let animationName = "";
-
-    if (result === "BUT" || result === "ARRÊT") {
-      // Échec - jouer l'animation miss
-      animationToPlay = playerAnimations.miss;
-      animationName = "miss";
-    } else if (result === "RATÉ") {
-      // Échec aussi - jouer l'animation miss
-      animationToPlay = playerAnimations.miss;
-      animationName = "miss";
-    }
-
-    // Pour l'instant, on ne joue que miss. Victory sera ajoutée plus tard selon les besoins du jeu
-    if (animationToPlay) {
-      animationToPlay.reset();
-      animationToPlay.loop = THREE.LoopOnce;
-      animationToPlay.play();
-      console.log(`Animation ${animationName} jouée`);
-
-      // Revenir à l'idle après l'animation
-      setTimeout(() => {
-        if (playerAnimations.idle) {
-          playerAnimations.idle.reset();
-          playerAnimations.idle.loop = THREE.LoopRepeat;
-          playerAnimations.idle.play();
-          playerIdleAction = playerAnimations.idle;
-          console.log("Retour à l'animation idle après résultat");
-        }
-      }, animationToPlay.getClip().duration * 1000);
-    }
+    // Fonction désactivée pour éviter les perturbations du jeu
+    // Nico reste simplement en animation idle après les tirs
+    console.log(`Résultat: ${result} - Animation de résultat désactivée`);
+    return;
   }
 
   let player = new THREE.Group();
@@ -728,7 +986,7 @@
       roughness: 0.8,
     })
   );
-  const playerZ = ball.position.z + 2.0;
+  const playerZ = ball.position.z + 4.0; // Position cohérente avec le joueur 3D
   const playerX = -1.0;
   torso.position.set(playerX, 1.2, playerZ);
   torso.castShadow = true;
@@ -847,6 +1105,7 @@
   let sessionOver = false;
   let isCharging = false;
   let chargeStart = 0;
+  let powerLocked = false; // Nouveau : bloquer au maximum
   let lastTarget = null;
 
   const resultEl = document.getElementById("hud-result");
@@ -916,7 +1175,7 @@
     stats: { vitesse: 83, tir: 79, passe: 91 },
     svg: null,
   };
-  let vBallBase = 8; // Vitesse réduite pour équilibrer le jeu
+  let vBallBase = 10; // Vitesse ajustée pour la nouvelle distance de cage
   let dispersionBase = 0.18;
 
   const TOTAL_SHOTS = 5;
@@ -981,7 +1240,7 @@
   function applyStats() {
     const t = norm01(selectedPlayer.stats?.tir ?? 80, 40, 100);
     const p = norm01(selectedPlayer.stats?.passe ?? 80, 40, 100);
-    vBallBase = THREE.MathUtils.lerp(6, 12, t); // Plage réduite pour équilibrer
+    vBallBase = THREE.MathUtils.lerp(8, 14, t); // Plage ajustée pour la nouvelle distance
     dispersionBase = THREE.MathUtils.lerp(0.45, 0.06, p);
   }
   function svgToDataUrl(svg) {
@@ -1038,7 +1297,42 @@
     if (t <= 0) return null;
     const p = o.clone().add(d.clone().multiplyScalar(t));
     p.z = goalZ;
-    return p;
+
+    // ====== LIMITES DE VISÉE ======
+    return applyAimingLimits(p);
+  }
+
+  function applyAimingLimits(targetPoint) {
+    if (!targetPoint) return null;
+
+    // Utiliser les limites définies globalement
+    const clampedX = clamp(targetPoint.x, aimingLimits.minX, aimingLimits.maxX);
+    const clampedY = clamp(targetPoint.y, aimingLimits.minY, aimingLimits.maxY);
+
+    // Créer le point limité
+    const limitedPoint = new THREE.Vector3(clampedX, clampedY, targetPoint.z);
+
+    // Debug des limites (optionnel)
+    const wasLimited = targetPoint.x !== clampedX || targetPoint.y !== clampedY;
+
+    // Debug optionnel des limites (désactivé pour une expérience plus fluide)
+    if (wasLimited && false) {
+      // Mettre à true pour debug
+      console.log("🎯 Visée limitée:", {
+        original: { x: targetPoint.x.toFixed(2), y: targetPoint.y.toFixed(2) },
+        limited: { x: clampedX.toFixed(2), y: clampedY.toFixed(2) },
+        limites: {
+          X: `[${aimingLimits.minX.toFixed(1)}, ${aimingLimits.maxX.toFixed(
+            1
+          )}]`,
+          Y: `[${aimingLimits.minY.toFixed(1)}, ${aimingLimits.maxY.toFixed(
+            1
+          )}]`,
+        },
+      });
+    }
+
+    return limitedPoint;
   }
 
   function buildTrajectoryPreview(start, target, speedFactor = 1) {
@@ -1140,17 +1434,35 @@
 
   // Fonction séparée pour le vrai départ de la balle
   function actuallyShootBall(target, powerFactor) {
+    // ====== SYSTÈME DE DISPERSION AMÉLIORÉ ======
     const pow01 = clamp((powerFactor - 0.7) / 0.6, 0, 1);
-    const maxDisp = THREE.MathUtils.lerp(
-      dispersionBase * 1.2,
-      dispersionBase * 2.2,
-      pow01
-    );
+
+    // Dispersion selon la puissance (CHAOS MAXIMUM !)
+    const minDisp = dispersionBase * 0.5; // ULTRA précis à faible puissance
+    const maxDisp = dispersionBase * 8.0; // CHAOS TOTAL à forte puissance !
+    const dispersion = THREE.MathUtils.lerp(
+      minDisp,
+      maxDisp,
+      Math.pow(pow01, 0.6)
+    ); // Progression agressive
+
+    // Angle et rayon aléatoires pour la dispersion
     const ang = Math.random() * Math.PI * 2;
-    const r = Math.random() * maxDisp;
+    const r = Math.random() * dispersion;
+
+    // Appliquer la dispersion au point cible
     const targetJ = target.clone();
     targetJ.x += Math.cos(ang) * r;
     targetJ.y += Math.sin(ang) * r;
+
+    // Debug optionnel de la dispersion
+    if (dispersion > dispersionBase * 2) {
+      console.log(
+        `🎯 Tir imprécis ! Puissance: ${(powerFactor * 100).toFixed(
+          0
+        )}%, Dispersion: ${dispersion.toFixed(2)}`
+      );
+    }
 
     const start = ball.position.clone();
     const dist = start.distanceTo(targetJ);
@@ -1166,7 +1478,7 @@
     // Jouer l'animation de plongée correspondante
     playKeeperDiveAnimation(targetJ.x, targetJ.y);
 
-    const camShot = new THREE.Vector3(0, 2.35, 6.2);
+    const camShot = new THREE.Vector3(0, 2.7, 7.5); // Ajustée pour la nouvelle distance
 
     function step(now) {
       const k = clamp((now - t0) / (duration * 1000), 0, 1);
@@ -1278,28 +1590,34 @@
           goalZ
         );
 
+        // Utiliser les dimensions effectives de la cage 3D
         const postLeft = new THREE.Vector3(
-          -goalWidth / 2,
-          goalHeight / 2,
+          -effective3DGoalWidth / 2,
+          effective3DGoalHeight / 2,
           goalZ
         );
         const postRight = new THREE.Vector3(
-          goalWidth / 2,
-          goalHeight / 2,
+          effective3DGoalWidth / 2,
+          effective3DGoalHeight / 2,
           goalZ
         );
-        const cross = new THREE.Vector3(0, goalHeight, goalZ);
+        const cross = new THREE.Vector3(0, effective3DGoalHeight, goalZ);
+        // Détection de collision avec les poteaux 3D (plus réaliste)
+        const postRadius3D = 0.12; // Rayon plus réaliste pour les poteaux 3D
         const hitPost =
-          postLeft.distanceTo(ballAtLine) <= postR + ballRadius + 0.02 ||
-          postRight.distanceTo(ballAtLine) <= postR + ballRadius + 0.02 ||
-          cross.distanceTo(ballAtLine) <= postR + ballRadius + 0.02;
+          postLeft.distanceTo(ballAtLine) <= postRadius3D + ballRadius + 0.02 ||
+          postRight.distanceTo(ballAtLine) <=
+            postRadius3D + ballRadius + 0.02 ||
+          cross.distanceTo(ballAtLine) <= postRadius3D + ballRadius + 0.02;
 
+        // Utiliser les dimensions effectives de la cage 3D avec une marge plus généreuse
+        const postMargin = 0.15; // Marge plus généreuse pour les poteaux 3D
         const insideX =
-          ballAtLine.x >= -goalWidth / 2 + postR + ballRadius &&
-          ballAtLine.x <= goalWidth / 2 - postR - ballRadius;
+          ballAtLine.x >= -effective3DGoalWidth / 2 + postMargin + ballRadius &&
+          ballAtLine.x <= effective3DGoalWidth / 2 - postMargin - ballRadius;
         const insideY =
           ballAtLine.y >= ballRadius &&
-          ballAtLine.y <= goalHeight - postR - ballRadius;
+          ballAtLine.y <= effective3DGoalHeight - postMargin - ballRadius;
         const inGoalRect = insideX && insideY;
 
         let result = "BUT";
@@ -1341,8 +1659,8 @@
         }
         sessionShots += 1;
         updateHUD();
-        // Jouer l'animation de résultat du joueur
-        playPlayerResultAnimation(result);
+        // Animation de résultat supprimée pour éviter les perturbations
+        // playPlayerResultAnimation(result);
         if (resultEl) {
           if (result === "POTEAU") {
             resultEl.textContent = "RATÉ !";
@@ -1399,37 +1717,295 @@
     requestAnimationFrame(step);
   } // Fin de actuallyShootBall
 
+  // ====== FONCTION POUR METTRE À JOUR LE CURSEUR EN CONTINU ======
+  function updateAimCursor() {
+    if (!lastTarget || isShooting || sessionOver || keeperAnimationInProgress)
+      return;
+
+    // Utiliser la dernière position connue
+    const p = lastTarget;
+    // Simplifier la détection des limites pour éviter les problèmes de calcul
+    const atLimits = false; // Pour l'instant on ignore les limites dans l'animation
+
+    // ====== SYSTÈME DE PRÉCISION DYNAMIQUE CORRIGÉ ======
+    let precisionFactor = 0;
+    let ringSize, innerRadius;
+
+    if (!isCharging) {
+      // SANS CHARGE = Curseur très visible et précis (vert)
+      ringSize = 0.28; // Taille très visible par défaut !
+      innerRadius = ringSize * 0.85; // Anneau fin
+      precisionFactor = 0; // Pour les couleurs et trajectoire
+    } else {
+      // AVEC CHARGE = Curseur grandit selon la puissance !
+      const power = getChargePower();
+      precisionFactor = clamp((power - 0.7) / 0.6, 0, 1); // 0-1
+
+      // ====== PROGRESSION TRÈS DOUCE ======
+      const ringBase = 0.28; // Même taille qu'au repos au début
+      const ringMax = 1.0; // Maximum raisonnable pour éviter les sauts brutaux
+
+      // Progression ultra-douce avec courbe très progressive
+      const smoothProgression = Math.pow(precisionFactor, 1.5); // Plus doux = exposant plus élevé
+      ringSize = THREE.MathUtils.lerp(ringBase, ringMax, smoothProgression);
+
+      // Épaisseur modérée pour l'esthétique
+      innerRadius = ringSize * 0.8; // Pas trop de variation pour l'esthétique
+    }
+
+    aimRing.geometry.dispose();
+    aimRing.geometry = new THREE.RingGeometry(innerRadius, ringSize, 48);
+
+    // ====== SYSTÈME DE COULEURS DYNAMIQUE ======
+    if (atLimits) {
+      // Rouge/orange quand on est aux limites
+      aimRing.material.color.setHex(0xff6b35);
+      aimInner.material.color.setHex(0xff3d00);
+    } else if (!isCharging) {
+      // Pas de charge = toujours vert (très précis)
+      aimRing.material.color.setHex(0x22ff88);
+      aimInner.material.color.setHex(0x00ff44);
+    } else {
+      // ====== TRANSITIONS DE COULEURS ULTRA-DOUCES ======
+      if (precisionFactor < 0.15) {
+        // Très début de charge = Vert (ultra précis)
+        aimRing.material.color.setHex(0x22ff88);
+        aimInner.material.color.setHex(0x00ff44);
+      } else if (precisionFactor < 0.35) {
+        // Début-milieu = Vert-bleu (encore très précis)
+        aimRing.material.color.setHex(0x44ff99);
+        aimInner.material.color.setHex(0x00ff66);
+      } else if (precisionFactor < 0.55) {
+        // Milieu = Bleu-cyan (précision correcte)
+        aimRing.material.color.setHex(0xffffff);
+        aimInner.material.color.setHex(0x00e0ff);
+      } else if (precisionFactor < 0.75) {
+        // Milieu-fin = Cyan-orange (précision diminue)
+        aimRing.material.color.setHex(0xffcc44);
+        aimInner.material.color.setHex(0xff9900);
+      } else if (precisionFactor < 0.9) {
+        // Forte charge = Orange (peu précis)
+        aimRing.material.color.setHex(0xff9933);
+        aimInner.material.color.setHex(0xff6600);
+      } else {
+        // Charge très élevée = Rouge (chaos imminent)
+        aimRing.material.color.setHex(0xff4444);
+        aimInner.material.color.setHex(0xff2200);
+      }
+    }
+
+    // Mettre à jour la trajectoire aussi
+    const power = isCharging ? getChargePower() : 0.9;
+    buildTrajectoryPreview(ball.position, p, power);
+
+    // ====== TRAJECTOIRE AVEC TRANSITIONS DOUCES ======
+    if (!isCharging) {
+      // Pas de charge = trajectoire claire et verte (très précis)
+      trajectory.material.opacity = 0.7;
+      trajectory.material.color.setHex(0x22ff88);
+    } else {
+      if (precisionFactor < 0.15) {
+        // Très début = trajectoire verte solide
+        trajectory.material.opacity = 0.7;
+        trajectory.material.color.setHex(0x22ff88);
+      } else if (precisionFactor < 0.35) {
+        // Début-milieu = trajectoire verte claire
+        trajectory.material.opacity = 0.65;
+        trajectory.material.color.setHex(0x44ff99);
+      } else if (precisionFactor < 0.55) {
+        // Milieu = trajectoire bleue
+        trajectory.material.opacity = 0.55;
+        trajectory.material.color.setHex(0x26c6da);
+      } else if (precisionFactor < 0.75) {
+        // Milieu-fin = trajectoire jaune-orange
+        trajectory.material.opacity = 0.4;
+        trajectory.material.color.setHex(0xffaa33);
+      } else if (precisionFactor < 0.9) {
+        // Forte charge = trajectoire orange
+        trajectory.material.opacity = 0.25;
+        trajectory.material.color.setHex(0xff9933);
+      } else {
+        // Très forte = trajectoire rouge transparente
+        trajectory.material.opacity = 0.15;
+        trajectory.material.color.setHex(0xff4444);
+      }
+    }
+  }
+
   function onPointerMove(e) {
     if (isShooting || sessionOver || keeperAnimationInProgress) return;
-    const p = getPointerTarget(e.clientX, e.clientY);
+
+    // Récupérer le point de visée original (sans limites)
+    const rect = renderer.domElement.getBoundingClientRect();
+    const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera({ x: mouseX, y: mouseY }, camera);
+    const o = raycaster.ray.origin;
+    const d = raycaster.ray.direction;
+
+    if (Math.abs(d.z) < 1e-6) {
+      aimRing.visible = false;
+      trajectory.visible = false;
+      return;
+    }
+
+    const t = (goalZ - o.z) / d.z;
+    if (t <= 0) {
+      aimRing.visible = false;
+      trajectory.visible = false;
+      return;
+    }
+
+    const originalPoint = o.clone().add(d.clone().multiplyScalar(t));
+    originalPoint.z = goalZ;
+
+    // Appliquer les limites
+    const p = applyAimingLimits(originalPoint);
     if (!p) {
       aimRing.visible = false;
       trajectory.visible = false;
       return;
     }
-    const power = isCharging ? getChargePower() : 0.9;
-    const ringBase = 0.16;
-    const ringMax = 0.5;
-    const ringSize = THREE.MathUtils.lerp(
-      ringBase,
-      ringMax,
-      clamp((power - 0.7) / 0.6, 0, 1)
-    );
+
+    // Détecter si on est aux limites
+    const atLimits = originalPoint.x !== p.x || originalPoint.y !== p.y;
+
+    // ====== SYSTÈME DE PRÉCISION DYNAMIQUE CORRIGÉ ======
+    let precisionFactor = 0;
+    let ringSize, innerRadius;
+
+    if (!isCharging) {
+      // SANS CHARGE = Curseur très visible et précis (vert)
+      ringSize = 0.28; // Taille très visible par défaut !
+      innerRadius = ringSize * 0.85; // Anneau fin
+      precisionFactor = 0; // Pour les couleurs et trajectoire
+    } else {
+      // AVEC CHARGE = Curseur grandit selon la puissance !
+      const power = getChargePower();
+      precisionFactor = clamp((power - 0.7) / 0.6, 0, 1); // 0-1
+
+      // ====== PROGRESSION TRÈS DOUCE ======
+      const ringBase = 0.28; // Même taille qu'au repos au début
+      const ringMax = 1.0; // Maximum raisonnable pour éviter les sauts brutaux
+
+      // Progression ultra-douce avec courbe très progressive
+      const smoothProgression = Math.pow(precisionFactor, 1.5); // Plus doux = exposant plus élevé
+      ringSize = THREE.MathUtils.lerp(ringBase, ringMax, smoothProgression);
+
+      // Épaisseur modérée pour l'esthétique
+      innerRadius = ringSize * 0.8; // Pas trop de variation pour l'esthétique
+    }
+
     aimRing.geometry.dispose();
-    aimRing.geometry = new THREE.RingGeometry(ringSize * 0.8, ringSize, 48);
+    aimRing.geometry = new THREE.RingGeometry(innerRadius, ringSize, 48);
+
+    // ====== SYSTÈME DE COULEURS DYNAMIQUE ======
+    if (atLimits) {
+      // Rouge/orange quand on est aux limites
+      aimRing.material.color.setHex(0xff6b35);
+      aimInner.material.color.setHex(0xff3d00);
+    } else if (!isCharging) {
+      // Pas de charge = toujours vert (très précis)
+      aimRing.material.color.setHex(0x22ff88);
+      aimInner.material.color.setHex(0x00ff44);
+    } else {
+      // ====== TRANSITIONS DE COULEURS ULTRA-DOUCES ======
+      if (precisionFactor < 0.15) {
+        // Très début de charge = Vert (ultra précis)
+        aimRing.material.color.setHex(0x22ff88);
+        aimInner.material.color.setHex(0x00ff44);
+      } else if (precisionFactor < 0.35) {
+        // Début-milieu = Vert-bleu (encore très précis)
+        aimRing.material.color.setHex(0x44ff99);
+        aimInner.material.color.setHex(0x00ff66);
+      } else if (precisionFactor < 0.55) {
+        // Milieu = Bleu-cyan (précision correcte)
+        aimRing.material.color.setHex(0xffffff);
+        aimInner.material.color.setHex(0x00e0ff);
+      } else if (precisionFactor < 0.75) {
+        // Milieu-fin = Cyan-orange (précision diminue)
+        aimRing.material.color.setHex(0xffcc44);
+        aimInner.material.color.setHex(0xff9900);
+      } else if (precisionFactor < 0.9) {
+        // Forte charge = Orange (peu précis)
+        aimRing.material.color.setHex(0xff9933);
+        aimInner.material.color.setHex(0xff6600);
+      } else {
+        // Charge très élevée = Rouge (chaos imminent)
+        aimRing.material.color.setHex(0xff4444);
+        aimInner.material.color.setHex(0xff2200);
+      }
+    }
 
     aimRing.visible = true;
     aimRing.position.set(p.x, p.y, goalZ + 0.001);
     lastTarget = p;
+    const power = isCharging ? getChargePower() : 0.9;
     buildTrajectoryPreview(ball.position, p, power);
+
+    // ====== TRAJECTOIRE SELON LA PRÉCISION ======
+    if (!isCharging) {
+      // Pas de charge = trajectoire claire et verte (très précis)
+      trajectory.material.opacity = 0.7;
+      trajectory.material.color.setHex(0x22ff88);
+    } else {
+      // ====== TRAJECTOIRE AVEC TRANSITIONS DOUCES ======
+      if (precisionFactor < 0.15) {
+        // Très début = trajectoire verte solide
+        trajectory.material.opacity = 0.7;
+        trajectory.material.color.setHex(0x22ff88);
+      } else if (precisionFactor < 0.35) {
+        // Début-milieu = trajectoire verte claire
+        trajectory.material.opacity = 0.65;
+        trajectory.material.color.setHex(0x44ff99);
+      } else if (precisionFactor < 0.55) {
+        // Milieu = trajectoire bleue
+        trajectory.material.opacity = 0.55;
+        trajectory.material.color.setHex(0x26c6da);
+      } else if (precisionFactor < 0.75) {
+        // Milieu-fin = trajectoire jaune-orange
+        trajectory.material.opacity = 0.4;
+        trajectory.material.color.setHex(0xffaa33);
+      } else if (precisionFactor < 0.9) {
+        // Forte charge = trajectoire orange
+        trajectory.material.opacity = 0.25;
+        trajectory.material.color.setHex(0xff9933);
+      } else {
+        // Très forte = trajectoire rouge transparente
+        trajectory.material.opacity = 0.15;
+        trajectory.material.color.setHex(0xff4444);
+      }
+    }
+
     trajectory.visible = true;
   }
 
   function getChargePower() {
     const elapsed = (performance.now() - chargeStart) / 1000;
-    // oscille entre 0.7x et 1.3x
-    const t = Math.sin(elapsed * Math.PI) * 0.5 + 0.5; // 0..1
-    return 0.7 + t * 0.6; // 0.7 -> 1.3
+
+    // ====== SYSTÈME DE BLOCAGE AU MAXIMUM ======
+    if (powerLocked) {
+      return 1.3; // Bloqué au maximum !
+    }
+
+    // ====== CHARGE RALENTIE POUR PLUS DE DIFFICULTÉ ======
+    // Oscillation beaucoup plus lente et difficile à timing
+    const slowFactor = 0.5; // 2x plus lent !
+    const t = Math.sin(elapsed * Math.PI * slowFactor) * 0.5 + 0.5; // 0..1
+
+    // Courbe non-linéaire pour rendre la puissance max encore plus difficile
+    const powerCurve = Math.pow(t, 1.2); // Plus difficile d'atteindre le max
+    const power = 0.7 + powerCurve * 0.6; // 0.7 -> 1.3
+
+    // ====== DÉTECTION DU MAXIMUM ET BLOCAGE ======
+    if (power >= 1.29) {
+      // Proche du maximum (1.3)
+      powerLocked = true;
+      console.log("🔒 PUISSANCE MAXIMALE BLOQUÉE !");
+      return 1.3;
+    }
+
+    return power;
   }
 
   let lastVoiceIndex = -1;
@@ -1475,6 +2051,7 @@
     }
     isCharging = true;
     chargeStart = performance.now();
+    powerLocked = false; // Réinitialiser le verrou pour chaque nouvelle charge
     playVoice();
   }
   function onPointerUp(e) {
@@ -1516,6 +2093,10 @@
     if (isCharging) {
       const pct = Math.round(((getChargePower() - 0.7) / 0.6) * 100);
       if (fillPower) fillPower.style.width = `${pct}%`;
+
+      // ====== MISE À JOUR CONTINUE DU CURSEUR ======
+      // Mettre à jour le curseur en continu pendant la charge
+      updateAimCursor();
     }
 
     for (let i = particles.length - 1; i >= 0; i--) {
